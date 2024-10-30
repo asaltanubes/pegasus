@@ -102,6 +102,9 @@ class AstroList(SecondOrderEdo):
     def masses(self):
         return [i.mass for i in self.__astros]
 
+    def __str__(self):
+        return f"AstroList(astros = {self.__astros}, fixed_astros = {self.__fixed_astros})"
+
 # sol = Astro([0, 0, 0], [0, 0, 0], 1.989e30)
 # tierra = Astro([150e9, 0, 0], [0, 29800, 0], 5.972e24)
 
