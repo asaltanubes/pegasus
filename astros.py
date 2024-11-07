@@ -1,13 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from diff_eq import SecondOrderEdo
 
 float_type = np.longdouble
 
-def gravitational_pull(i_position: np.ndarray, j_position: np.ndarray, i_mass: float_type, j_mass: float_type):
-    G = float_type(6.6743e-11)
-    r = j_position-i_position
-    return G * i_mass*j_mass/(np.linalg.norm(r)**3)*r
+# def gravitational_pull(i_position: np.ndarray, j_position: np.ndarray, i_mass: float_type, j_mass: float_type):
+#     G = float_type(6.6743e-11)
+#     r = j_position-i_position
+#     return G * i_mass*j_mass/(np.linalg.norm(r)**3)*r
 
 class Astro:
     def __init__(self, position: tuple[float, float, float], velocity: tuple[float, float, float], mass: float, name: str = ''):
@@ -17,24 +16,27 @@ class Astro:
         self.name = name
 
         self.force = np.array([0.0, 0.0, 0.0], dtype=float_type)
+        self.potential_energy = np.array(0, dtype=float_type)
 
     
-    def gravitational_pull_over_self(self, other) -> np.array:
-        return gravitational_pull(self.position, other.position, self.mass, other.mass)
+    # def gravitational_pull_over_self(self, other) -> np.array:
+    #     return gravitational_pull(self.position, other.position, self.mass, other.mass)
     
     def reset_force(self):
         self.force = 0*self.force
-
+    def reset_potential(self):
+        self.potential = 0*self.potential
     def __str__(self):
         return (f"{self.name}, "if self.name!='' else "") + f'position: {self.position}, speed: {self.velocity}, mass: {self.mass}' 
     
     def __repr__(self):
         return f"Astro({self})"
 
-class AstroList(SecondOrderEdo):
+class AstroList():
     def __init__(self, astros: list[Astro], fixed_astros: list[Astro] = [], time=0):
         self.__astros = np.array(astros)
         self.__fixed_astros = np.array(fixed_astros)
+        self.__potential_energy = np.longdouble(0)
         self.time = float_type(time)
     
     def reset_forces(self):
@@ -64,30 +66,55 @@ class AstroList(SecondOrderEdo):
         return (yp, y, self.time)
     
     def second_order_func(self, yp, y, x):
+
+        G = float_type(6.6743e-11)
         masses = self.masses()
         position_and_masses = [[y[i], masses[i]] for i in range(len(y))]
-        forces = np.zeros((len(self.__astros), 3), dtype=float_type)
-        for i in range(len(forces)):
-            i_pos, i_mass = position_and_masses[i] 
-            for j in range(i+1, len(forces)):
+        # forces = np.zeros((len(self.__astros), 3), dtype=float_type)
+        self.reset_forces()
+        self.reset_potentials()
+        for i in range(len(self.__astros)):
+            astro_i = self.__astros[i]
+            i_pos, i_mass = position_and_masses[i]
+            for j in range(i+1, len(self.__astros)):
+                astro_j = self.__astros[j]
                 j_pos, j_mass = position_and_masses[j]
-                force = gravitational_pull(i_pos, j_pos, i_mass, j_mass)
-                forces[i] += force
-                forces[j] -= force
+                r = j_pos-i_pos
+                module_r = np.linalg.norm(r)
+                force = G * i_mass*j_mass/module_r**3*r
+                astro_i.forces += force
+                astro_j.forces -= force
+                potential =  -G * i_mass*j_mass/module_r
+                astro_i.potential += potential
+                astro_j.potential += potential
+                
 
         if self.__fixed_astros.size > 0:
             for fixed_astro in self.__fixed_astros:
-                for i in range(len(forces)):
+                for i in range(len(self.__astros)):
+                    free_astro = self.__astros[i]
                     i_pos, i_mass = position_and_masses[i]
-                    force = gravitational_pull(i_pos, fixed_astro.position, i_mass, fixed_astro.mass)
-                    forces[i] += force
+                    j_pos = fixed_astro.position
+                    j_mass = fixed_astro.mass
+                    r = j_pos-i_pos
+                    module_r = np.linalg.norm(r)
+                    force = G * i_mass*j_mass/module_r**3*r
+                    potential =  -G * i_mass*j_mass/module_r
+                    free_astro.force += force
+                    fixed_astro.force -= force
+                    free_astro.potential += potential
+                    fixed_astro.potential += potential
+
+
                     
-        return np.array([forces[i]/masses[i] for i in range(len(forces))])
+        return np.array([self.__astros[i].force/masses[i] for i in range(len(self.__astros))])
     
-    def update_state(self, yp, y, t):
-        for (astro, v, r) in zip(self.__astros, yp, y):
+    def update_state(self, yp, y, t, forces = None, potentials = None):
+        for (astro, v, r, f, p) in zip(self.__astros, yp, y, forces, potentials):
             astro.position = r
             astro.velocity = v
+            astro.force = f
+            astro.potential = p
         
         self.time = t
                     
@@ -101,6 +128,9 @@ class AstroList(SecondOrderEdo):
         return [i.velocity[0:2].copy() for i in self.__astros]
     def masses(self):
         return [i.mass for i in self.__astros]
+
+    def get_astros(self):
+        return np.append(self.__fixed_astros, self.__astros)
 
     def __str__(self):
         return f"AstroList(astros = {self.__astros}, fixed_astros = {self.__fixed_astros})"

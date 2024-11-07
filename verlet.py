@@ -1,13 +1,12 @@
 import numpy as np
-from diff_eq import SecondOrderEdoSolver
 
-class Verlet(SecondOrderEdoSolver):
+class Verlet():
     def __init__(self, stepsize):
         self.stepsize = np.longdouble(stepsize)
     
-    def advance_time(self, edo, t_final):
-        func = lambda yp, y, x: edo.second_order_func(yp, y, x)
-        yp0, y0, t0 = edo.second_order_initial_conditions()
+    def advance_time(self, astrolist, t_final):
+        func = lambda yp, y, x: astrolist.second_order_func(yp, y, x)
+        yp0, y0, t0 = astrolist.second_order_initial_conditions()
         delta_t = np.array([self.stepsize])
         
         number_of_steps = (t_final-t0)//delta_t
@@ -15,7 +14,7 @@ class Verlet(SecondOrderEdoSolver):
 
         r = y0.copy()
         v = yp0.copy()
-        a = func(v, r, t0)
+        a, _ = func(v, r, t0)
         delta_t2 = delta_t**2
 
         for i in range(1, int(number_of_steps)+1):
