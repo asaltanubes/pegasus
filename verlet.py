@@ -14,7 +14,7 @@ class Verlet():
 
         r = y0.copy()
         v = yp0.copy()
-        a, _ = func(v, r, t0)
+        a = func(v, r, t0)
         delta_t2 = delta_t**2
 
         for i in range(1, int(number_of_steps)+1):

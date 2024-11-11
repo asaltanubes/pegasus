@@ -16,7 +16,7 @@ class Astro:
         self.name = name
 
         self.force = np.array([0.0, 0.0, 0.0], dtype=float_type)
-        self.potential_energy = np.array(0, dtype=float_type)
+        self.potential = np.array(0, dtype=float_type)
 
     
     # def gravitational_pull_over_self(self, other) -> np.array:
@@ -31,17 +31,26 @@ class Astro:
     
     def __repr__(self):
         return f"Astro({self})"
+    
+    
 
 class AstroList():
     def __init__(self, astros: list[Astro], fixed_astros: list[Astro] = [], time=0):
         self.__astros = np.array(astros)
         self.__fixed_astros = np.array(fixed_astros)
-        self.__potential_energy = np.longdouble(0)
+        self.potential = np.longdouble(0)
         self.time = float_type(time)
     
     def reset_forces(self):
         for i in self.__astros:
             i.reset_force()
+
+    def reset_potentials(self):
+        for i in self.__astros:
+            i.reset_potential()
+        for i in self.__fixed_astros:
+            i.reset_potential()
+    
     
     def update_forces(self):
         self.reset_forces()
@@ -104,17 +113,18 @@ class AstroList():
                     fixed_astro.force -= force
                     free_astro.potential += potential
                     fixed_astro.potential += potential
+        #  Revisar calculo potencial 1/2, GUstavo payaso
+        self.potential = (np.sum([i.potential for i in self.__astros], dtype=np.longdouble)\
+            +np.sum([i.potential for i in self.__fixed_astros], dtype=np.longdouble))/2
 
-
-                    
         return np.array([self.__astros[i].force/masses[i] for i in range(len(self.__astros))])
     
     def update_state(self, yp, y, t, forces = None, potentials = None):
-        for (astro, v, r, f, p) in zip(self.__astros, yp, y, forces, potentials):
+        for (astro, v, r) in zip(self.__astros, yp, y):
             astro.position = r
             astro.velocity = v
-            astro.force = f
-            astro.potential = p
+            # astro.force = f
+            # astro.potential = p
         
         self.time = t
                     

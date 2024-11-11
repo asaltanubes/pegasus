@@ -23,7 +23,7 @@ file
 def save_points(points: list[AstroList]):
     """ 
     Saves all data regarding the Astros in a file for every time step
-    calculated
+    calculated (an AstroList)
     """
     for i in range(len(points[0].get_astros())):
         astrolist = points[0]

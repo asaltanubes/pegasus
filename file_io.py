@@ -11,7 +11,7 @@ class ConfigParams:
         self.plot_skip_steps = params["plot_skip_steps"]
         self.use_velocity_read = params["use_velocity_read"]
 
-
+ 
 
 def load_initial_condition(file: str) -> AstroList:
     astros = [] 
@@ -60,9 +60,9 @@ def load_configuration(file: str) -> ConfigParams:
                     if k == "use_velocity_read":
                         defaults[k] = parse_bool(value, file, n, line)
                     elif k == "delta_time":
-                        defaults[k] = float(value)
+                        defaults[k] = float(eval(value))
                     else:
-                        defaults[k] = int(value)
+                        defaults[k] = int(eval(value))
 
     return ConfigParams(defaults)
 
