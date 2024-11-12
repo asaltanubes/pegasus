@@ -11,7 +11,9 @@ class ConfigParams:
         self.plot_skip_steps = params["plot_skip_steps"]
         self.use_velocity_read = params["use_velocity_read"]
 
- 
+    def __str__(self):
+        return f"Delta time: {self.delta_time}\nNumber of steps: {self.number_steps}\nInterval for printing energy: {self.interval_print_energy}\n"+\
+               f"interval print coordinates: {self.interval_print_coor}\nPlot skip steps:{self.plot_skip_steps}\nUse velocity read: {self.use_velocity_read}"
 
 def load_initial_condition(file: str) -> AstroList:
     astros = [] 

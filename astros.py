@@ -89,11 +89,11 @@ class AstroList():
                 astro_j = self.__astros[j]
                 j_pos, j_mass = position_and_masses[j]
                 r = j_pos-i_pos
-                module_r = np.linalg.norm(r)
-                force = G * i_mass*j_mass/module_r**3*r
+                inv_r = 1/np.linalg.norm(r)
+                force = G * i_mass*j_mass*inv_r**3*r
                 astro_i.forces += force
                 astro_j.forces -= force
-                potential =  -G * i_mass*j_mass/module_r
+                potential =  -G * i_mass*j_mass*inv_r
                 astro_i.potential += potential
                 astro_j.potential += potential
                 
@@ -106,9 +106,9 @@ class AstroList():
                     j_pos = fixed_astro.position
                     j_mass = fixed_astro.mass
                     r = j_pos-i_pos
-                    module_r = np.linalg.norm(r)
-                    force = G * i_mass*j_mass/module_r**3*r
-                    potential =  -G * i_mass*j_mass/module_r
+                    inv_r = 1/np.linalg.norm(r)
+                    force = G * i_mass*j_mass*inv_r**3*r
+                    potential =  -G * i_mass*j_mass*inv_r
                     free_astro.force += force
                     fixed_astro.force -= force
                     free_astro.potential += potential
@@ -139,8 +139,17 @@ class AstroList():
     def masses(self):
         return [i.mass for i in self.__astros]
 
-    def get_astros(self):
+    def get_all_astros(self):
         return np.append(self.__fixed_astros, self.__astros)
+    
+    def get_astro_by_name(self, name):
+        return next(i for i in self.get_all_astros() if i.name==name)
+    
+    def get_free_astros(self):
+        return self.__astros
+    
+    def get_fixed_astros(self):
+        return self.__fixed_astros
 
     def __str__(self):
         return f"AstroList(astros = {self.__astros}, fixed_astros = {self.__fixed_astros})"

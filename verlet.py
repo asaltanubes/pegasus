@@ -23,7 +23,9 @@ class Verlet():
             a = func(v, r, t0 + i*delta_t)
             v += a/2 * delta_t
         
-        return (v, r, final_time)
+        astrolist.update_state(v, r, final_time) 
+        
+        return astrolist
         
         
         
