@@ -11,6 +11,7 @@ float_type = np.longdouble
 class Astro:
     def __init__(self, position: tuple[float, float, float], velocity: tuple[float, float, float], mass: float, name: str = ''):
         self.position = np.array(position, dtype=float_type)
+        self.pos_com = np.array([0, 0, 0], dtype=float_type)
         self.velocity = np.array(velocity, dtype=float_type)
         self.mass = float_type(mass)
         self.name = name
@@ -26,6 +27,13 @@ class Astro:
         self.force = 0*self.force
     def reset_potential(self):
         self.potential = 0*self.potential
+    
+    def kinetic_energy(self):
+        return 1/2*self.mass*np.linalg.norm(self.velocity)**2
+    
+    def angular_momentum(self):
+        return self.mass*np.cross(self.position, self.velocity)
+    
     def __str__(self):
         return (f"{self.name}, "if self.name!='' else "") + f'position: {self.position}, speed: {self.velocity}, mass: {self.mass}' 
     
@@ -34,12 +42,13 @@ class Astro:
     
     
 
-class AstroList():
+class AstroList:
     def __init__(self, astros: list[Astro], fixed_astros: list[Astro] = [], time=0):
         self.__astros = np.array(astros)
         self.__fixed_astros = np.array(fixed_astros)
         self.potential = np.longdouble(0)
         self.time = float_type(time)
+        self.center_of_mass = np.array([0, 0, 0], dtype=float_type)
     
     def reset_forces(self):
         for i in self.__astros:
@@ -79,6 +88,7 @@ class AstroList():
         G = float_type(6.6743e-11)
         masses = self.masses()
         position_and_masses = [[y[i], masses[i]] for i in range(len(y))]
+        self.potential = 0*self.potential
         # forces = np.zeros((len(self.__astros), 3), dtype=float_type)
         self.reset_forces()
         self.reset_potentials()
@@ -91,10 +101,11 @@ class AstroList():
                 r = j_pos-i_pos
                 inv_r = 1/np.linalg.norm(r)
                 force = G * i_mass*j_mass*inv_r**3*r
-                astro_i.forces += force
-                astro_j.forces -= force
+                astro_i.force += force
+                astro_j.force -= force
                 potential =  -G * i_mass*j_mass*inv_r
                 astro_i.potential += potential
+                self.potential += potential
                 astro_j.potential += potential
                 
 
@@ -112,16 +123,15 @@ class AstroList():
                     free_astro.force += force
                     fixed_astro.force -= force
                     free_astro.potential += potential
+                    self.potential += potential
                     fixed_astro.potential += potential
-        #  Revisar calculo potencial 1/2, GUstavo payaso
-        self.potential = (np.sum([i.potential for i in self.__astros], dtype=np.longdouble)\
-            +np.sum([i.potential for i in self.__fixed_astros], dtype=np.longdouble))/2
-
         return np.array([self.__astros[i].force/masses[i] for i in range(len(self.__astros))])
     
     def update_state(self, yp, y, t, forces = None, potentials = None):
+        self.center_of_mass = np.sum([i.mass*i.position for i in self.get_all_astros()], axis=0)/np.sum(self.masses())
         for (astro, v, r) in zip(self.__astros, yp, y):
             astro.position = r
+            astro.com_pos = astro.position-self.center_of_mass
             astro.velocity = v
             # astro.force = f
             # astro.potential = p
@@ -130,14 +140,19 @@ class AstroList():
                     
 
         
-
+    def kinetic_energy(self):
+        return np.sum(i.kinetic_energy() for i in self.__astros)
+    
+    def angular_momentum(self):
+        return np.sum(i.angular_momentum() for i in self.__astros)
+    
     def positions_2d(self):
         return [i.position[0:2].copy() for i in self.__astros]
 
     def velocities_2d(self):
         return [i.velocity[0:2].copy() for i in self.__astros]
     def masses(self):
-        return [i.mass for i in self.__astros]
+        return [i.mass for i in self.get_all_astros()]
 
     def get_all_astros(self):
         return np.append(self.__fixed_astros, self.__astros)
@@ -152,7 +167,7 @@ class AstroList():
         return self.__fixed_astros
 
     def __str__(self):
-        return f"AstroList(astros = {self.__astros}, fixed_astros = {self.__fixed_astros})"
+        return f"AstroList:\nFree astros\n"+"\n".join(str(i) for i in self.__astros)+"\nFixed astros:\n" + "\n".join(str(i) for i in self.__fixed_astros)
 
 # sol = Astro([0, 0, 0], [0, 0, 0], 1.989e30)
 # tierra = Astro([150e9, 0, 0], [0, 29800, 0], 5.972e24)

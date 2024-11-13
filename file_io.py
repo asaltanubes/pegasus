@@ -28,10 +28,12 @@ def load_initial_condition(file: str) -> AstroList:
             values = [i.strip().lower() for i in line.split(",") if i.strip() != ""]
             if len(values) != 8 and len(values) != 9:
                 raise ValueError(f"Number of values in .ini file {file} is invalid expected 8 or 9 got {len(values)} in line {n+1} -> {line}")
-            position = np.array(values[2:5], dtype=np.longdouble)
-            velocity = np.array(values[5:8], dtype=np.longdouble)
             name = values[0].lower()
             mass = np.longdouble(values[1])
+            position = np.array([eval(i) for i in values[2:5]], dtype=np.longdouble)
+            # defaults["use_velocity_read"]
+            velocity = np.array([eval(i) for i in values[5:8]], dtype=np.longdouble)
+
             astro = Astro(position, velocity, mass, name)
 
             if len(values) == 9:
@@ -47,7 +49,7 @@ def load_initial_condition(file: str) -> AstroList:
             
                         
 def load_configuration(file: str) -> ConfigParams:
-    defaults = {"delta_time": 420, "number_steps": 400000, "interval_print_energy": 10000, "interval_print_coor": 10000, "plot_skip_steps": 100, "use_velocity_read": False}
+    defaults = {"delta_time": 3600, "number_steps": 365*24, "interval_print_energy": 10000, "interval_print_coor": 10000, "plot_skip_steps": 100, "use_velocity_read": False}
 
     with open(file, "rt") as f:
         for n, line in enumerate(f.readlines()):
@@ -71,9 +73,6 @@ def load_configuration(file: str) -> ConfigParams:
 def parse_bool(value: str, file: str, line_number: int, line: str) -> bool:
     value = value.lower().strip()
     if value in {"true", "false"}:
-        if value == "true":
-            return True
-        else:
-            return False
+        return value == "true"
     else:
         raise ValueError(f"Unknown bool value \"{value}\" in line {line_number+1} of the file {file} -> {line}")
