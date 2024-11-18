@@ -19,28 +19,28 @@ class Astro:
         self.force = np.array([0.0, 0.0, 0.0], dtype=float_type)
         self.potential = np.array(0, dtype=float_type)
 
-    
+
     # def gravitational_pull_over_self(self, other) -> np.array:
     #     return gravitational_pull(self.position, other.position, self.mass, other.mass)
-    
+
     def reset_force(self):
         self.force = 0*self.force
     def reset_potential(self):
         self.potential = 0*self.potential
-    
+
     def kinetic_energy(self):
         return 1/2*self.mass*np.linalg.norm(self.velocity)**2
-    
+
     def angular_momentum(self):
         return self.mass*np.cross(self.position, self.velocity)
-    
+
     def __str__(self):
-        return (f"{self.name}, "if self.name!='' else "") + f'position: {self.position}, speed: {self.velocity}, mass: {self.mass}' 
-    
+        return (f"{self.name}, "if self.name!='' else "") + f'mass: {self.mass}, position: {self.position}, velocity: {self.velocity}'
+
     def __repr__(self):
         return f"Astro({self})"
-    
-    
+
+
 
 class AstroList:
     def __init__(self, astros: list[Astro], fixed_astros: list[Astro] = [], time=0):
@@ -49,7 +49,7 @@ class AstroList:
         self.potential = np.longdouble(0)
         self.time = float_type(time)
         self.center_of_mass = np.array([0, 0, 0], dtype=float_type)
-    
+
     def reset_forces(self):
         for i in self.__astros:
             i.reset_force()
@@ -59,8 +59,8 @@ class AstroList:
             i.reset_potential()
         for i in self.__fixed_astros:
             i.reset_potential()
-    
-    
+
+
     def update_forces(self):
         self.reset_forces()
         list_iter = self.__astros.copy()
@@ -82,7 +82,7 @@ class AstroList:
         y  = [i.position for i in self.__astros]
         x  = np.longdouble(0)
         return (yp, y, self.time)
-    
+
     def second_order_func(self, yp, y, x):
 
         G = float_type(6.6743e-11)
@@ -107,7 +107,7 @@ class AstroList:
                 astro_i.potential += potential
                 self.potential += potential
                 astro_j.potential += potential
-                
+
 
         if self.__fixed_astros.size > 0:
             for fixed_astro in self.__fixed_astros:
@@ -126,7 +126,7 @@ class AstroList:
                     self.potential += potential
                     fixed_astro.potential += potential
         return np.array([self.__astros[i].force/masses[i] for i in range(len(self.__astros))])
-    
+
     def update_state(self, yp, y, t, forces = None, potentials = None):
         self.center_of_mass = np.sum([i.mass*i.position for i in self.get_all_astros()], axis=0)/np.sum(self.masses())
         for (astro, v, r) in zip(self.__astros, yp, y):
@@ -135,17 +135,17 @@ class AstroList:
             astro.velocity = v
             # astro.force = f
             # astro.potential = p
-        
-        self.time = t
-                    
 
-        
+        self.time = t
+
+
+
     def kinetic_energy(self):
         return np.sum(i.kinetic_energy() for i in self.__astros)
-    
+
     def angular_momentum(self):
         return np.sum(i.angular_momentum() for i in self.__astros)
-    
+
     def positions_2d(self):
         return [i.position[0:2].copy() for i in self.__astros]
 
@@ -156,18 +156,18 @@ class AstroList:
 
     def get_all_astros(self):
         return np.append(self.__fixed_astros, self.__astros)
-    
+
     def get_astro_by_name(self, name):
         return next(i for i in self.get_all_astros() if i.name==name)
-    
+
     def get_free_astros(self):
         return self.__astros
-    
+
     def get_fixed_astros(self):
         return self.__fixed_astros
 
     def __str__(self):
-        return f"AstroList:\nFree astros\n"+"\n".join(str(i) for i in self.__astros)+"\nFixed astros:\n" + "\n".join(str(i) for i in self.__fixed_astros)
+        return f"AstroList:\n  Free astros:\n    "+"\n    ".join(str(i) for i in self.__astros)+"\n  Fixed astros:\n    " + "\n    ".join(str(i) for i in self.__fixed_astros)
 
 # sol = Astro([0, 0, 0], [0, 0, 0], 1.989e30)
 # tierra = Astro([150e9, 0, 0], [0, 29800, 0], 5.972e24)

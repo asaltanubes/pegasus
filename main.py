@@ -57,10 +57,10 @@ def main():
         positions.append([i.position for i in astrolist.get_free_astros()])
         com.append(astrolist.center_of_mass)
         kinetic_energy.append(astrolist.kinetic_energy())
-        potential.append(astrolist.potential) 
-        
+        potential.append(astrolist.potential)
+
         angular_momentum.append(astrolist.angular_momentum())
-         
+
         times.append(astrolist.time)
         theta_earth = np.arctan2(earth.position[1], earth.position[0])
         if np.abs(theta0_earth-theta_earth) < np.pi/(360*12):
@@ -97,7 +97,7 @@ def main():
     plt.title('Angular momentum')
     plt.show()
 
-    
+
 
 if __name__ == "__main__":
     main()

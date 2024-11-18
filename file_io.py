@@ -12,11 +12,11 @@ class ConfigParams:
         self.use_velocity_read = params["use_velocity_read"]
 
     def __str__(self):
-        return f"Delta time: {self.delta_time}\nNumber of steps: {self.number_steps}\nInterval for printing energy: {self.interval_print_energy}\n"+\
-               f"interval print coordinates: {self.interval_print_coor}\nPlot skip steps:{self.plot_skip_steps}\nUse velocity read: {self.use_velocity_read}"
+        return f"  Delta time: {self.delta_time}\n  Number of steps: {self.number_steps}\n  Interval for printing energy: {self.interval_print_energy}\n"+\
+               f"  interval print coordinates: {self.interval_print_coor}\n  Plot skip steps: {self.plot_skip_steps}\n  Use velocity read: {self.use_velocity_read}"
 
 def load_initial_condition(file: str) -> AstroList:
-    astros = [] 
+    astros = []
     fixed_astros = []
     with open(file, "rt") as f:
         for n, line in enumerate(f.readlines()):
@@ -44,10 +44,10 @@ def load_initial_condition(file: str) -> AstroList:
                     astros.append(astro)
                     continue
             astros.append(astro)
-        
+
     return AstroList(astros, fixed_astros)
-            
-                        
+
+
 def load_configuration(file: str) -> ConfigParams:
     defaults = {"delta_time": 3600, "number_steps": 365*24, "interval_print_energy": 10000, "interval_print_coor": 10000, "plot_skip_steps": 100, "use_velocity_read": False}
 
