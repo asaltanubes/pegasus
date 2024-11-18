@@ -79,7 +79,7 @@ def main():
     print(f"Max of the angular momentum y component: {np.max(y_angular_momentum)}, minumum of the angular momentum y component: {np.min(y_angular_momentum)}")
     print(f"Variation of the angular momentum z component: {(np.max(z_angular_momentum)-np.min(z_angular_momentum))/(np.mean(z_angular_momentum))}")
 
-    with open("positions_output.txt", "wt") as file:
+    with open("positions.output", "wt") as file:
         file.write("\n".join([", ".join([str(j) for j in i]) for i in positions]))
     for i in range(len(astrolist.get_free_astros())):
         plt.plot([j[i][0] for j in positions], [j[i][1] for j in positions])
