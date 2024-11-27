@@ -1,6 +1,6 @@
 from astros import AstroList
 
-# 
+#
 """
 # nombres sol, tierra, luna, ...
 sol masa, tierra masa, luna masa, ...
@@ -18,9 +18,15 @@ file
 
 # a partir de una lista de objetos AstroList
 def save_positions(positions: list[AstroList]):
-    """ 
-    Saves all data regarding the Astros in a file for every time step
-    calculated (an AstroList)
+    """
+    Saves position data for celestial bodies to data files.
+
+    Takes a list of AstroList objects containing position information for multiple celestial bodies
+    and saves the data to individual .dat files in the output_data directory. Each file contains
+    the body's name, mass, and position coordinates over time.
+
+    Args:
+        positions: A list of AstroList objects containing position and properties of celestial bodies
     """
     # Me gustaria que los datos se guarden en una carpeta
     for astro in positions[0].get_all_astros(): # Para cada planeta
@@ -33,7 +39,3 @@ def save_positions(positions: list[AstroList]):
                 # data_file.write(astro.potential_energy +',')
                 data_file.write('\n')
         data_file.close()
-
-
-
-

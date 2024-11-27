@@ -6,19 +6,12 @@ import numpy as np
 from animation import create_animation
 from save_state import save_positions
 """
-- Borrar todo lo que no sea útil y simplificar cosas (muchas cosas)
-- Para los mismos parámetros de simulación, nuestro código es al menos 2 segundos más lento que el suyo
-- Printear de mejor manera las initial conditions
 - Añadir progreso a la ejecución del programa ?
--
-
-Cosas que no tenemos con respecto a Junquera:
-    - Astro.filename
-    - Astro.acceleration
-    - Astro positions in polars or center of mass
-    - Getters / Setters / Printers
-    - AstroList.add_astro / remove_astro
-
+- borrar diff_eq, initial_test, notebook
+- borrar mucho codigo comentado por ahi
+- update_forces sirve para algo?
+- update_state necesita forces y potential?
+- use velocity read se está teniendo en cuenta?
 
 Por alguna razón que escapa completamente a mi entendimiento, Junquera hace esto para la Luna cunado está leyendo el file de los astros:
 
@@ -73,8 +66,8 @@ def main():
             print(f"New year!: {astrolist.time/(3600*24)} day")
 
     save_positions(astro_positions) # Saves all positions in different files for each astro
-    create_animation(animation_states)
-    
+    create_animation(animation_states, "animation")
+
     potential = np.array(potential)
     kinetic_energy = np.array(kinetic_energy)
     total_energy = potential+kinetic_energy
@@ -104,8 +97,6 @@ def main():
     plt.plot(times, z_angular_momentum)
     plt.title('Angular momentum')
     plt.show()
-
-
 
 if __name__ == "__main__":
     main()
