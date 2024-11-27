@@ -39,6 +39,12 @@ class Astro:
 
     def __repr__(self):
         return f"Astro({self})"
+    def copy(self):
+        astro_copy = Astro(self.position.copy(), self.velocity.copy(), self.mass.copy(), self.name)
+        astro_copy.force = self.force.copy()
+        astro_copy.potential = self.potential.copy()
+        astro_copy.pos_com = self.pos_com.copy()
+        return astro_copy
 
 
 
@@ -165,6 +171,11 @@ class AstroList:
 
     def get_fixed_astros(self):
         return self.__fixed_astros
+
+    def copy(self):
+        fixed_astros = [astro.copy() for astro in self.__fixed_astros]
+        free_astros = [astro.copy() for astro in self.__astros]
+        return AstroList(free_astros, fixed_astros, self.time)
 
     def __str__(self):
         return f"AstroList:\n  Free astros:\n    "+"\n    ".join(str(i) for i in self.__astros)+"\n  Fixed astros:\n    " + "\n    ".join(str(i) for i in self.__fixed_astros)

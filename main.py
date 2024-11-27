@@ -3,6 +3,7 @@ from verlet import *
 from file_io import *
 import matplotlib.pyplot as plt
 import numpy as np
+from animation import create_animation
 from save_state import save_positions
 """
 - Borrar todo lo que no sea útil y simplificar cosas (muchas cosas)
@@ -53,8 +54,11 @@ def main():
     earth = astrolist.get_astro_by_name("earth")
     theta0_earth = np.arctan2(earth.position[1], earth.position[0])
 
+    animation_states = []
+
     while astrolist.time < final_time:
         astrolist = verlet.advance_time(astrolist, params.delta_time+astrolist.time)
+        animation_states.append(astrolist.copy())
         positions.append([i.position for i in astrolist.get_free_astros()])
         com.append(astrolist.center_of_mass)
         kinetic_energy.append(astrolist.kinetic_energy())
@@ -69,6 +73,7 @@ def main():
             print(f"New year!: {astrolist.time/(3600*24)} day")
 
     save_positions(astro_positions) # Saves all positions in different files for each astro
+    create_animation(animation_states)
     
     potential = np.array(potential)
     kinetic_energy = np.array(kinetic_energy)
