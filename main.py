@@ -44,6 +44,7 @@ def main():
     angular_momentum = []
     com = []
     times = []
+    astro_positions = [] # Rulo test
 
     print(f"Initial conditions \n {astrolist}")
     print()
@@ -58,6 +59,7 @@ def main():
         com.append(astrolist.center_of_mass)
         kinetic_energy.append(astrolist.kinetic_energy())
         potential.append(astrolist.potential)
+        astro_positions.append(astrolist)  # Rulo test
 
         angular_momentum.append(astrolist.angular_momentum())
 
@@ -66,7 +68,8 @@ def main():
         if np.abs(theta0_earth-theta_earth) < np.pi/(360*12):
             print(f"New year!: {astrolist.time/(3600*24)} day")
 
-
+    save_positions(astro_positions) # Saves all positions in different files for each astro
+    
     potential = np.array(potential)
     kinetic_energy = np.array(kinetic_energy)
     total_energy = potential+kinetic_energy
