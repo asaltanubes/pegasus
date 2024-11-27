@@ -38,7 +38,7 @@ def eclipse_check(astrolist: AstroList):
     # Create a function that transforms seconds to years, day, hour!!
 
 
-def search_eclipse(...):
+def search_eclipse(sun_positions: list, earth_positions: list, moon_positions: list, time):
     """
     Argumentos? un txt, o tres arrays con las posiciones, da igual
     Given a set of positions (sun,earth,moon), this function checks if 
@@ -50,10 +50,6 @@ def search_eclipse(...):
     r_earth = 6378000 # m
     r_moon = 1737500 # m
 
-    sun_positions = 
-    earth_positions = 
-    moon_positions = 
-
     r1 = np.subtract(earth_positions, sun_positions)
     r2 = np.subtract(moon_positions, sun_positions)
 
@@ -63,14 +59,14 @@ def search_eclipse(...):
     beta = np.arctan(np.divide(r_moon,r2_norm))
     value = np.subtract(np.sum(alpha,beta),theta)
 
-    eclipses = []
+    eclipses_time = []
 
     # return[i for theta[i] in theta if  theta[i]<(alpha[i]+beta[i])] como lo hago así?
     # Los que sí son eclipses, guardo su indice
     for i, t in enumerate(value):
-        if value<0:
-            eclipses.append(i)
-    return(eclipses)
+        if t<0:
+            eclipses_time.append(time[i])
+    return(eclipses_time)
             
     # Si ponemos la fecha de inicio como argumento, podria dar como resultado fechas
     # return(date_0+i*dt) 
