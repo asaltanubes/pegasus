@@ -262,7 +262,9 @@ class AstroList:
         """Create an independent copy of the AstroList instance"""
         fixed_astros = [astro.copy() for astro in self.__fixed_astros]
         free_astros = [astro.copy() for astro in self.__astros]
-        return AstroList(free_astros, fixed_astros, self.time)
+        alist = AstroList(free_astros, fixed_astros, self.time)
+        alist.center_of_mass = self.center_of_mass.copy()
+        return alist
 
     def __str__(self) -> str:
         """Get string representation of AstroList showing fixed and non-fixed objects"""

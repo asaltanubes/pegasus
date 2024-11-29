@@ -21,6 +21,7 @@ def create_animation(lists: list[AstroList], filename: str):
     # ax.set_xlim(0, 30)
     # ax.set_ylim(0, 30)
     # ax.set_zlim(0, 30)
+    ax.set_aspect("equal")
 
     def update(list_astros: AstroList) -> list[PathCollection]:
         """

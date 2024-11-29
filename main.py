@@ -56,7 +56,7 @@ def main():
         com.append(astrolist.center_of_mass)
         kinetic_energy.append(astrolist.kinetic_energy())
         potential.append(astrolist.potential)
-        astro_positions.append(astrolist)  # Rulo test
+        astro_positions.append(astrolist.copy())  # Rulo test
 
         angular_momentum.append(astrolist.angular_momentum())
 
@@ -66,7 +66,6 @@ def main():
             print(f"New year!: {astrolist.time/(3600*24)} day")
 
     save_positions(astro_positions) # Saves all positions in different files for each astro
-    create_animation(animation_states, "animation")
 
     potential = np.array(potential)
     kinetic_energy = np.array(kinetic_energy)
@@ -84,7 +83,7 @@ def main():
         file.write("\n".join([", ".join([str(j) for j in i]) for i in positions]))
     for i in range(len(astrolist.get_free_astros())):
         plt.plot([j[i][0] for j in positions], [j[i][1] for j in positions])
-    plt.plot(0,0,'or')
+    plt.plot([i[0] for i in com], [i[1] for i in com], marker="o")
     plt.gca().set_aspect('equal')
     plt.show()
 
@@ -97,6 +96,7 @@ def main():
     plt.plot(times, z_angular_momentum)
     plt.title('Angular momentum')
     plt.show()
+    create_animation(animation_states, "animation")
 
 if __name__ == "__main__":
     main()

@@ -25,11 +25,12 @@ class ConfigParams:
         self.interval_print_coor = params["interval_print_coor"]
         self.plot_skip_steps = params["plot_skip_steps"]
         self.use_velocity_read = params["use_velocity_read"]
+        self.animation_step = params["animation_step"]
 
     def __str__(self) -> str:
         """Returns string representation of the configuration parameters"""
         return f"  Delta time: {self.delta_time}\n  Number of steps: {self.number_steps}\n  Interval for printing energy: {self.interval_print_energy}\n"+\
-               f"  interval print coordinates: {self.interval_print_coor}\n  Plot skip steps: {self.plot_skip_steps}\n  Use velocity read: {self.use_velocity_read}"
+               f"  interval print coordinates: {self.interval_print_coor}\n  Plot skip steps: {self.plot_skip_steps}\n  Use velocity read: {self.use_velocity_read}\n  Animation step: {self.animation_step}"
 
 def load_initial_condition(file: str) -> AstroList:
     """
@@ -89,7 +90,7 @@ def load_configuration(file: str) -> ConfigParams:
     The configuration file should contain key-value pairs for parameters.
     Default values are used for any parameters not specified in the file.
     """
-    defaults = {"delta_time": 3600, "number_steps": 365*24, "interval_print_energy": 10000, "interval_print_coor": 10000, "plot_skip_steps": 100, "use_velocity_read": False}
+    defaults = {"delta_time": 3600, "number_steps": 365*24, "interval_print_energy": 10000, "interval_print_coor": 10000, "plot_skip_steps": 100, "use_velocity_read": False, "animation_step": 0, "eclipse": []}
 
     with open(file, "rt") as f:
         for n, line in enumerate(f.readlines()):
@@ -105,6 +106,9 @@ def load_configuration(file: str) -> ConfigParams:
                         defaults[k] = parse_bool(value, file, n, line)
                     elif k == "delta_time":
                         defaults[k] = float(eval(value))
+                    elif k == "eclipse":
+                        defaults[k] = value.split(",")
+
                     else:
                         defaults[k] = int(eval(value))
 
