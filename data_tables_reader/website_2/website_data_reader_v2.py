@@ -49,11 +49,12 @@ def read_files(number_of_files):
         # print(astro_name)
         # print(position) 
         # print(velocity)
+        # We multiply by 1000 to make km to m
         with open(output_file_name, 'a')  as file:
-            file.write(f'{astro_name},\t{',\t'.join([str(i) for i in position])},\t{',\t'.join([str(i) for i in velocity])},\n')
+            file.write(f'{astro_name},\t \t{',\t'.join([str(1000*eval(i)) for i in position])},\t{',\t'.join([str(1000*eval(i)) for i in velocity])},\n')
     with open(output_file_name, 'a')  as file:
         file.write('#\t'+ date_line + '\n')
     
 
 
-read_files(11)
+read_files(10)
