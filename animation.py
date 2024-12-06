@@ -2,6 +2,8 @@ from matplotlib.collections import PathCollection
 import matplotlib.pyplot as plt
 from matplotlib import animation
 from astros import Astro, AstroList
+from random import randrange
+from tqdm import tqdm
 
 def create_animation(lists: list[AstroList], filename: str):
     """
@@ -21,7 +23,8 @@ def create_animation(lists: list[AstroList], filename: str):
     # ax.set_xlim(0, 30)
     # ax.set_ylim(0, 30)
     # ax.set_zlim(0, 30)
-    ax.set_aspect("equal")
+    colors = ["yellow", "gray", "orange", "blue", "lightgray", "red", "khaki", "burlywood", "paleturquoise", "cornflowerblue"]
+    colors = colors + [((randrange(0, 256)/255, randrange(0, 256)/255, randrange(0, 256)/255),) for _ in range(len(lists[0].get_all_astros()) - len(colors))]
 
     def update(list_astros: AstroList) -> list[PathCollection]:
         """
@@ -32,15 +35,16 @@ def create_animation(lists: list[AstroList], filename: str):
             scat: List of scatter plot objects for current frame
         """
         scat = []
-        for astro in list_astros.get_all_astros():
-            scat.append(ax.scatter(*astro.position.T))
-
+        for (astro, color) in zip(list_astros.get_all_astros(), colors):
+            scat.append(ax.scatter(*astro.pos_com.T, c=color, label=astro.name))
         return scat
-
+    print("generating video")
     frames = []
-    for l in lists:
+    for l in tqdm(lists):
         frames.append(update(l))
-
+    ax.legend(loc = (-0.3, 0.3), labels=[i.name for i in lists[0].get_all_astros()], )
+    ax.set_aspect("equal", adjustable="datalim")
+    print("loop ended")
     anim = animation.ArtistAnimation(fig, frames, 1000/60)
-
-    anim.save(f'{filename}.gif', writer='pillow')
+    print("saving")
+    anim.save(f'{filename}.gif')

@@ -50,6 +50,7 @@ def main():
     animation_states = []
 
     while astrolist.time < final_time:
+        print(f"{float(astrolist.time/final_time*100)}", end="\r")
         astrolist = verlet.advance_time(astrolist, params.delta_time+astrolist.time)
         animation_states.append(astrolist.copy())
         positions.append([i.position for i in astrolist.get_free_astros()])
@@ -62,8 +63,9 @@ def main():
 
         times.append(astrolist.time)
         theta_earth = np.arctan2(earth.position[1], earth.position[0])
-        if np.abs(theta0_earth-theta_earth) < np.pi/(360*12):
-            print(f"New year!: {astrolist.time/(3600*24)} day")
+        # if np.abs(theta0_earth-theta_earth) < np.pi/(360*12):
+        #     print(f"New year!: {astrolist.time/(3600*24)} day")
+    print()
 
     save_positions(astro_positions) # Saves all positions in different files for each astro
 
@@ -88,15 +90,16 @@ def main():
     plt.show()
 
     plt.plot([i[0] for i in com], [i[1] for i in com])
+    plt.title("COM")
     plt.show()
 
-    plt.plot(times, total_energy)
-    plt.title('Total Energy')
+    plt.plot(times, (total_energy-np.mean(total_energy))/np.mean(total_energy))
+    plt.title('Relative deviation of Energy')
     plt.show()
-    plt.plot(times, z_angular_momentum)
-    plt.title('Angular momentum')
+    plt.plot(times, (z_angular_momentum-np.mean(z_angular_momentum))/np.mean(z_angular_momentum))
+    plt.title('Relative deviation of\n the z component of total Angular momentum')
     plt.show()
-    create_animation(animation_states, "animation")
+    create_animation(animation_states[::params.animation_step], "animation")
 
 if __name__ == "__main__":
     main()

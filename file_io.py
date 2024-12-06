@@ -107,7 +107,7 @@ def load_configuration(file: str) -> ConfigParams:
                     elif k == "delta_time":
                         defaults[k] = float(eval(value))
                     elif k == "eclipse":
-                        defaults[k] = value.split(",")
+                        defaults[k] = [i.strip() for i in value.split(",")]
 
                     else:
                         defaults[k] = int(eval(value))

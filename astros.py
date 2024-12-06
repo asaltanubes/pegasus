@@ -210,7 +210,7 @@ class AstroList:
         self.center_of_mass = np.sum([i.mass*i.position for i in self.get_all_astros()], axis=0)/np.sum(self.masses())
         for (astro, v, r) in zip(self.__astros, yp, y):
             astro.position = r
-            astro.com_pos = astro.position-self.center_of_mass
+            astro.pos_com = astro.position-self.center_of_mass
             astro.velocity = v
             # astro.force = f
             # astro.potential = p
