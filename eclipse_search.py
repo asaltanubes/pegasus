@@ -8,7 +8,7 @@ import numpy as np
 
 def eclipse_check(astrolist: AstroList):
     """
-    Given an Astrolist
+    INPUT: Given an Astrolist. Podría ser metodo de Astrolist
     Checks if the current state of the system formed by sun, earth, and moon,
     is in an eclipse like configuration.
     The moon is eclipsed by the earth or the earth by the moon.
@@ -29,10 +29,10 @@ def eclipse_check(astrolist: AstroList):
     r2 = np.subtract(moon_position, sun_position)
     r1_norm, r2_norm = np.linalg.norm(np.vstack([r1, r2]),axis = 1) 
 
-    theta = np.arccos(np.linalg.norm(np.divide(np.dot(r1,r2)),(r1_norm*r2_norm)))
-    alpha = np.arctan(np.divide(r_earth/r1_norm))
-    beta = np.arctan(np.divide(r_moon/r2_norm))
-    if (alpha+beta)>theta:
+    theta = np.arccos(np.linalg.norm(np.divide(np.dot(r1,r2),(r1_norm*r2_norm))))
+    alpha = np.arctan(np.divide(r_earth,r1_norm))
+    beta = np.arctan(np.divide(r_moon,r2_norm))
+    if (alpha+beta) > theta:
         print(f'Eclipse! on {astrolist.time}')
 
     # Create a function that transforms seconds to years, day, hour!!
@@ -40,6 +40,7 @@ def eclipse_check(astrolist: AstroList):
 
 def search_eclipse(sun_positions: list, earth_positions: list, moon_positions: list, time):
     """
+    INPUT: lista de posiciones
     Argumentos? un txt, o tres arrays con las posiciones, da igual
     Given a set of positions (sun,earth,moon), this function checks if 
     any is compatibles with an eclipse.
