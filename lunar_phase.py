@@ -8,8 +8,12 @@ from astros import *
 
 
 def get_moon_phase(system: AstroList):
-    r_earth = system.get_astro_by_name('earth').position
-    r_moon = system.get_astro_by_name('moon').position
+
+    earth = system.get_astro_by_name('earth')
+    moon = system.get_astro_by_name('moon')
+
+    r_earth = earth.position
+    r_moon = moon.position
     r_e_m = r_earth -r_moon
     # Calculate the angle fromed by the Moon-Earth and Sun-Earth lines. 
     theta = np.asin(np.cross(r_e_m, r_earth)/np.linalg.norm(r_e_m)/np.linalg.norm(r_earth))

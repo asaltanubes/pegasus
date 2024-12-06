@@ -4,9 +4,13 @@ and searching of solar eclipses.
 """
 from astros import AstroList, Astro
 import numpy as np
+import matplotlib.pyplot as plt
+
+from time import strftime 
+# Python library used for converting years to days, months...
 
 
-def eclipse_check(astrolist: AstroList):
+def eclipse_check(astrolist: AstroList, last_time_eclipse):
     """
     INPUT: Given an Astrolist. Podría ser metodo de Astrolist
     Checks if the current state of the system formed by sun, earth, and moon,
@@ -33,7 +37,16 @@ def eclipse_check(astrolist: AstroList):
     alpha = np.arctan(np.divide(r_earth,r1_norm))
     beta = np.arctan(np.divide(r_moon,r2_norm))
     if (alpha+beta) > theta:
-        print(f'Eclipse! on {astrolist.time}')
+       
+
+        if not last_time_eclipse:    
+            print(f'{'Sun!' if r1_norm>r2_norm else 'Moon!'} Eclipse on {astrolist.time}')
+        last_time_eclipse = True
+
+    else:
+        last_time_eclipse = False
+    return(last_time_eclipse)
+        
 
     # Create a function that transforms seconds to years, day, hour!!
 
@@ -75,25 +88,23 @@ def search_eclipse(sun_positions: list, earth_positions: list, moon_positions: l
 
 
 
-
-
-
-
-
-
 def seconds_to_years(time_s: float):
     """
-    Given a number of seconds, it translates the amount to Years and Days
+    Given a number of seconds, it translates the amount to Years, weeks and Days
     """
     y = 365.24 # days/y
     years = time_s//(3600*24*y)
-    rest_year = time_s/(3600*24*y)-years
-    days = rest_year*y
-    return(f"{years} years, {days} days")
+    rest_year = (time_s/(3600*24*y)-years)
+    weeks = rest_year*y//7
+    days = (rest_year*y/7 - weeks)*7
+    return(f"year {years}, week {weeks}, day {round(days)}")
 
 
-a = (((365.24*2)+180)*24+8)*3600
-print(seconds_to_years(a))
+
+# Test for second_to_years():
+
+# a = (((365.24*2))+7*5+3)*24*3600
+# print(seconds_to_years(a))
     
 
     
