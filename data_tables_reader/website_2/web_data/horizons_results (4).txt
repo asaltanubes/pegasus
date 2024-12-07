@@ -1,0 +1,148 @@
+*******************************************************************************
+ Revised: July 31, 2013             Moon / (Earth)                          301
+ 
+ GEOPHYSICAL DATA (updated 2018-Aug-15):
+  Vol. mean radius, km  = 1737.53+-0.03    Mass, x10^22 kg       =    7.349
+  Radius (gravity), km  = 1738.0           Surface emissivity    =    0.92
+  Radius (IAU), km      = 1737.4           GM, km^3/s^2          = 4902.800066
+  Density, g/cm^3       =    3.3437        GM 1-sigma, km^3/s^2  =  +-0.0001  
+  V(1,0)                =   +0.21          Surface accel., m/s^2 =    1.62
+  Earth/Moon mass ratio = 81.3005690769    Farside crust. thick. = ~80 - 90 km
+  Mean crustal density  = 2.97+-.07 g/cm^3 Nearside crust. thick.= 58+-8 km 
+  Heat flow, Apollo 15  = 3.1+-.6 mW/m^2   Mean angular diameter = 31'05.2"
+  Heat flow, Apollo 17  = 2.2+-.5 mW/m^2   Sid. rot. rate, rad/s = 0.0000026617
+  Geometric Albedo      = 0.12             Mean solar day        = 29.5306 d
+  Obliquity to orbit    = 6.67 deg         Orbit period          = 27.321582 d
+  Semi-major axis, a    = 384400 km        Eccentricity          = 0.05490
+  Mean motion, rad/s    = 2.6616995x10^-6  Inclination           = 5.145 deg
+  Apsidal period        = 3231.50 d        Nodal period          = 6798.38 d
+                                 Perihelion  Aphelion    Mean
+  Solar Constant (W/m^2)         1414+-7     1323+-7     1368+-7
+  Maximum Planetary IR (W/m^2)   1314        1226        1268
+  Minimum Planetary IR (W/m^2)      5.2         5.2         5.2
+********************************************************************************
+
+
+*******************************************************************************
+Ephemeris / WWW_USER Fri Nov 29 03:19:31 2024 Pasadena, USA      / Horizons
+*******************************************************************************
+Target body name: Moon (301)                      {source: DE441}
+Center body name: Sun (10)                        {source: DE441}
+Center-site name: BODY CENTER
+*******************************************************************************
+Start time      : A.D. 2024-Jan-01 00:00:00.0000 TDB
+Stop  time      : A.D. 2024-Jan-07 00:00:00.0000 TDB
+Step-size       : 1440 minutes
+*******************************************************************************
+Center geodetic : 0.0, 0.0, 0.0                   {E-lon(deg),Lat(deg),Alt(km)}
+Center cylindric: 0.0, 0.0, 0.0                   {E-lon(deg),Dxy(km),Dz(km)}
+Center radii    : 695700.0, 695700.0, 695700.0 km {Equator_a, b, pole_c}
+Output units    : KM-S
+Calendar mode   : Mixed Julian/Gregorian
+Output type     : GEOMETRIC cartesian states
+Output format   : 3 (position, velocity, LT, range, range-rate)
+Reference frame : Ecliptic of J2000.0
+*******************************************************************************
+JDTDB
+   X     Y     Z
+   VX    VY    VZ
+   LT    RG    RR
+*******************************************************************************
+$$SOE
+2460310.500000000 = A.D. 2024-Jan-01 00:00:00.0000 TDB 
+ X =-2.517894579079584E+07 Y = 1.451613930689555E+08 Z = 1.696211394185573E+04
+ VX=-3.025123150480888E+01 VY=-6.001889331002243E+00 VZ=-5.808094571415667E-02
+ LT= 4.914363672828622E+02 RG= 1.473289164983201E+08 RR=-7.435708206437354E-01
+2460311.500000000 = A.D. 2024-Jan-02 00:00:00.0000 TDB 
+ X =-2.778013088166710E+07 Y = 1.446172051801723E+08 Z = 1.141725048363954E+04
+ VX=-2.995753189702448E+01 VY=-6.588011339660941E+00 VZ=-6.977697146417849E-02
+ LT= 4.912106117971066E+02 RG= 1.472612367063384E+08 RR=-8.183852723407508E-01
+2460312.500000000 = A.D. 2024-Jan-03 00:00:00.0000 TDB 
+ X =-3.035504877779784E+07 Y = 1.440242322886209E+08 Z = 4.996135198809206E+03
+ VX=-2.964444394273485E+01 VY=-7.130839538602189E+00 VZ=-7.829861909991198E-02
+ LT= 4.909674666331015E+02 RG= 1.471883436199705E+08 RR=-8.638968026361359E-01
+2460313.500000000 = A.D. 2024-Jan-04 00:00:00.0000 TDB 
+ X =-3.290235127444267E+07 Y = 1.433862907434804E+08 Z =-2.010710625387728E+03
+ VX=-2.931958037659583E+01 VY=-7.628738419446106E+00 VZ=-8.327890136478500E-02
+ LT= 4.907156749285610E+02 RG= 1.471128583659623E+08 RR=-8.780551627617723E-01
+2460314.500000000 = A.D. 2024-Jan-05 00:00:00.0000 TDB 
+ X =-3.542136333777352E+07 Y = 1.427073072560649E+08 Z =-9.283374435864389E+03
+ VX=-2.899095755956864E+01 VY=-8.080800039832596E+00 VZ=-8.440401895792204E-02
+ LT= 4.904645583433544E+02 RG= 1.470375755076386E+08 RR=-8.588905859039183E-01
+2460315.500000000 = A.D. 2024-Jan-06 00:00:00.0000 TDB 
+ X =-3.791213008163802E+07 Y = 1.419912495095001E+08 Z =-1.647733281999826E+04
+ VX=-2.866727233584999E+01 VY=-8.487038314786034E+00 VZ=-8.142131618954185E-02
+ LT= 4.902239885534528E+02 RG= 1.469654544990035E+08 RR=-8.045868729216182E-01
+2460316.500000000 = A.D. 2024-Jan-07 00:00:00.0000 TDB 
+ X =-4.037548484165809E+07 Y = 1.412420284074240E+08 Z =-2.322996388624609E+04
+ VX=-2.835808926386297E+01 VY=-8.848854091460284E+00 VZ=-7.417239678004339E-02
+ LT= 4.900043037001948E+02 RG= 1.468995946368599E+08 RR=-7.137989385526051E-01
+$$EOE
+*******************************************************************************
+ 
+TIME
+
+  Barycentric Dynamical Time ("TDB" or T_eph) output was requested. This
+continuous coordinate time is equivalent to the relativistic proper time
+of a clock at rest in a reference frame co-moving with the solar system
+barycenter but outside the system's gravity well. It is the independent
+variable in the solar system relativistic equations of motion.
+
+  TDB runs at a uniform rate of one SI second per second and is independent
+of irregularities in Earth's rotation.
+ 
+CALENDAR SYSTEM
+
+  Mixed calendar mode was active such that calendar dates after AD 1582-Oct-15
+(if any) are in the modern Gregorian system. Dates prior to 1582-Oct-5 (if any)
+are in the Julian calendar system, which is automatically extended for dates
+prior to its adoption on 45-Jan-1 BC.  The Julian calendar is useful for
+matching historical dates. The Gregorian calendar more accurately corresponds
+to the Earth's orbital motion and seasons. A "Gregorian-only" calendar mode is
+available if such physical events are the primary interest.
+
+REFERENCE FRAME AND COORDINATES
+
+  Ecliptic at the standard reference epoch
+
+    Reference epoch: J2000.0
+    X-Y plane: adopted Earth orbital plane at the reference epoch
+               Note: IAU76 obliquity of 84381.448 arcseconds wrt ICRF X-Y plane
+    X-axis   : ICRF
+    Z-axis   : perpendicular to the X-Y plane in the directional (+ or -) sense
+               of Earth's north pole at the reference epoch.
+
+  Symbol meaning:
+
+    JDTDB    Julian Day Number, Barycentric Dynamical Time
+      X      X-component of position vector (km)
+      Y      Y-component of position vector (km)
+      Z      Z-component of position vector (km)
+      VX     X-component of velocity vector (km/sec)                           
+      VY     Y-component of velocity vector (km/sec)                           
+      VZ     Z-component of velocity vector (km/sec)                           
+      LT     One-way down-leg Newtonian light-time (sec)
+      RG     Range; distance from coordinate center (km)
+      RR     Range-rate; radial velocity wrt coord. center (km/sec)
+
+ABERRATIONS AND CORRECTIONS
+
+ Geometric state vectors have NO corrections or aberrations applied.
+
+Computations by ...
+
+    Solar System Dynamics Group, Horizons On-Line Ephemeris System
+    4800 Oak Grove Drive, Jet Propulsion Laboratory
+    Pasadena, CA  91109   USA
+
+    General site: https://ssd.jpl.nasa.gov/
+    Mailing list: https://ssd.jpl.nasa.gov/email_list.html
+    System news : https://ssd.jpl.nasa.gov/horizons/news.html
+    User Guide  : https://ssd.jpl.nasa.gov/horizons/manual.html
+    Connect     : browser        https://ssd.jpl.nasa.gov/horizons/app.html#/x
+                  API            https://ssd-api.jpl.nasa.gov/doc/horizons.html
+                  command-line   telnet ssd.jpl.nasa.gov 6775
+                  e-mail/batch   https://ssd.jpl.nasa.gov/ftp/ssd/hrzn_batch.txt
+                  scripts        https://ssd.jpl.nasa.gov/ftp/ssd/SCRIPTS
+    Author      : Jon.D.Giorgini@jpl.nasa.gov
+*******************************************************************************
