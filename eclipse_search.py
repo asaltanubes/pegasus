@@ -1,25 +1,38 @@
+# -*- coding: utf-8 -*-
 """
-The following module implements a function that will enable the tracking
-and searching of solar eclipses. 
+The following script implements a function in order to study eclipses.
+This way it will be possible to predict Solar and Moon Eclipses, discriminating 
+both types and getting the exact week and day of the event.
+
+Created on Wed Nov 20 2024
+
+@author: raul
 """
 from astros import AstroList, Astro
 import numpy as np
-import matplotlib.pyplot as plt
-
-from time import strftime 
-# Python library used for converting years to days, months...
 
 
-def eclipse_check(astrolist: AstroList, last_time_eclipse):
+
+def eclipse_check(astrolist: AstroList, last_time_eclipse: bool) -> bool:
     """
-    INPUT: Given an Astrolist. Podría ser metodo de Astrolist
-    Checks if the current state of the system formed by sun, earth, and moon,
-    is in an eclipse like configuration.
-    The moon is eclipsed by the earth or the earth by the moon.
+    Checks if the configuration of the Sun, Moon and Earth is compatible
+    with an eclipse, comparing the shadow of both bodies with the angular separation
+    in between them. 
+
+    Args:
+        astrolist (Astrolist): Astrolist including the Sun, Earth and Moon, and their respective 
+                               positions and velocities.
+        last_time_eclipse (bool): Boolean showing if the last checked Astrolist had an elcipse. Used to avoid
+                                  pointing out the same eclipse several times.
+
+    Returns:
+        Boolean showing if an elcipse was found, to be used as last_time_eclipse
     """
+    # Rasius of sun and moon, used to calculate their "shadow"
     r_earth = 6378000 # m
     r_moon = 1737500 # m
 
+    # Get the 3 bodies of interest and their positions
     sun = astrolist.get_astro_by_name('sun')
     earth = astrolist.get_astro_by_name('earth')
     moon = astrolist.get_astro_by_name('moon')
@@ -28,38 +41,38 @@ def eclipse_check(astrolist: AstroList, last_time_eclipse):
     earth_position = earth.position
     moon_position = moon.position
 
-    # Define r1 as the distance from sun to earth and r2 as the distance from sun to the moon.
+    # Define r1 as the sun-earth distance and r2 as the sun-moon distance, and their norms
     r1 = np.subtract(earth_position, sun_position)
     r2 = np.subtract(moon_position, sun_position)
     r1_norm, r2_norm = np.linalg.norm(np.vstack([r1, r2]),axis = 1) 
 
+    # Calculate necessary angles, theta angle between moon and earth, alpha earth-radius angle
+    #   and beta moon-radius angle
     theta = np.arccos(np.linalg.norm(np.divide(np.dot(r1,r2),(r1_norm*r2_norm))))
     alpha = np.arctan(np.divide(r_earth,r1_norm))
     beta = np.arctan(np.divide(r_moon,r2_norm))
-    if (alpha+beta) > theta:
-       
 
-        if not last_time_eclipse:    
-            print(f'{'Sun!' if r1_norm>r2_norm else 'Moon!'} Eclipse on {astrolist.time}')
-        last_time_eclipse = True
+    # Set the condition for an eclipse
+    if (alpha+beta) > theta:
+        # Check if another eclipse was just found
+        if not last_time_eclipse: 
+            # Check if eclipse was a Moon or Earth Eclipse and print date   
+            print(f'{'Sun' if r1_norm>r2_norm else 'Moon'} Eclipse! on {astrolist.time} (since sim. start)')
+
+        last_time_eclipse = True 
 
     else:
         last_time_eclipse = False
+
     return(last_time_eclipse)
         
-
-    # Create a function that transforms seconds to years, day, hour!!
 
 
 def search_eclipse(sun_positions: list, earth_positions: list, moon_positions: list, time):
     """
-    INPUT: lista de posiciones
-    Argumentos? un txt, o tres arrays con las posiciones, da igual
-    Given a set of positions (sun,earth,moon), this function checks if 
-    any is compatibles with an eclipse.
-    Returns -index- for which we find an eclipse. 
-    More efficcient method than the first.
-    1 year = (365 days, 5 hours, 49 minutes, 1.1 seconds)
+    Call me maybe...
+    Poject of similar function to be applied to a list of positions instead of just
+    one Astrolist. More efficient, but not refined
     """
     r_earth = 6378000 # m
     r_moon = 1737500 # m
@@ -88,10 +101,20 @@ def search_eclipse(sun_positions: list, earth_positions: list, moon_positions: l
 
 
 
-def seconds_to_years(time_s: float):
+def seconds_to_years(time_s: float) -> str:
     """
-    Given a number of seconds, it translates the amount to Years, weeks and Days
+    User-friendly function to display data. Transforms time from 
+    seconds to a more readable format years, week, days.
+    
+    Args:
+        time_s (float): Amount of time as a number of seconds.
+
+    Returns (str):  
+         A formated string showing the amount of seconds as 
+        years, weeks, days.  
+    
     """
+
     y = 365.24 # days/y
     years = time_s//(3600*24*y)
     rest_year = (time_s/(3600*24*y)-years)
@@ -101,7 +124,7 @@ def seconds_to_years(time_s: float):
 
 
 
-# Test for second_to_years():
+# TEST for second_to_years():
 
 # a = (((365.24*2))+7*5+3)*24*3600
 # print(seconds_to_years(a))
