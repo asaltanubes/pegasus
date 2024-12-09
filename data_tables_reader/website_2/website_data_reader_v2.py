@@ -43,7 +43,6 @@ def read_files(number_of_files: int):
 
     with open(output_file_name, 'w')  as file:
 
-        # Erase the file
         file.truncate(0)
 
         #  Write the header with legend
