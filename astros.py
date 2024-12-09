@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+
+
+
 import numpy as np
 
 float_type = np.longdouble

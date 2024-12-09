@@ -15,6 +15,7 @@ from moon_phase import get_moon_phase
 - update_state necesita forces y potential?
 - use velocity read se está teniendo en cuenta?
 - plot sin ejes con fondo negro para el power point
+- ¿¿Guardar input: initial_conditions y simulation_parameters??
 
 Por alguna razón que escapa completamente a mi entendimiento, Junquera hace esto para la Luna cunado está leyendo el file de los astros:
 
@@ -26,15 +27,30 @@ Por alguna razón que escapa completamente a mi entendimiento, Junquera hace est
 """
 
 
+"""
+This script runs a simulation for the system given in initial_conditions.ini.
+It propagates the state of the astronomical system over the given Delta_time*Number_steps 
+specified in the simulation_parameters. Afterwards, it saves several graphs and displays results.
+"""
+
+
 def main():
+    """
+    Description
+    """
+
+    # Read the initial conditions
     astrolist = load_initial_condition("initial_conditions.ini")
 
+    # Read and load the simulation parameters
     params = load_configuration("simulation_parameters.conf")
 
+    # Generate the Velocity Verlet integration method implementation
     verlet = Verlet(params.delta_time)
 
-    final_time = params.delta_time * params.number_steps # Rulo test
+    final_time = params.delta_time * params.number_steps 
 
+    # Display initial conditions and parameters
     print(f"Initial conditions \n {astrolist}")
     print()
     print(f"Parameters: \n{params}")
@@ -43,12 +59,14 @@ def main():
     # earth = astrolist.get_astro_by_name("earth")
     # theta0_earth = np.arctan2(earth.position[1], earth.position[0])
 
+    # All astrolist are stored
     astrolist_states = np.array([])
     step = 0
 
     # For the functioning of the eclipse search
     last_time_eclipse = False
 
+    # Propagate the astrolist state for given final_state
     while astrolist.time < final_time:
         print(f"Simulation is {astrolist.time.item()/final_time*100:.3f}% complete!", end="\r")
         astrolist = verlet.advance_time(astrolist, params.delta_time+astrolist.time)
@@ -73,7 +91,8 @@ def main():
     print("                                           ", end = "\r")
     print("Simulation complete!")
 
-    save_positions(astrolist_states) # Saves all positions in different files for each astro
+    # Saves all positions in different files for each astro
+    save_positions(astrolist_states) 
     times = np.array([astrolist.time for astrolist in astrolist_states])
     
     angular_momentum = np.array([astrolist.angular_momentum() for astrolist in astrolist_states])

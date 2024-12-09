@@ -1,5 +1,6 @@
-import numpy as np
+# -*- coding: utf-8 -*-
 
+import numpy as np
 from astros import Astro, AstroList, float_type
 
 class ConfigParams:

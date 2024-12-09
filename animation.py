@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+ 
+ 
 from matplotlib.collections import PathCollection
 import matplotlib.pyplot as plt
 from matplotlib import animation
