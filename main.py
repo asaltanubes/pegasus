@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from animation import create_animation
 from save_state import save_positions
+from eclipse_search import *
+from moon_phase import get_moon_phase
 """
 - Añadir progreso a la ejecución del programa ?
 - borrar diff_eq, initial_test, notebook
@@ -44,10 +46,17 @@ def main():
     astrolist_states = np.array([])
     step = 0
 
+    # For the functioning of the eclipse search
+    last_time_eclipse = False
+
     while astrolist.time < final_time:
-        print(f"Simulation is {float(astrolist.time)/final_time*100:.3f}% complete!", end="\r")
+        print(f"Simulation is {astrolist.time.item()/final_time*100:.3f}% complete!", end="\r")
         astrolist = verlet.advance_time(astrolist, params.delta_time+astrolist.time)
         astrolist_states = np.append(astrolist_states, astrolist.copy())
+        
+        #  Check for eclipses over the time of simulation
+        last_time_eclipse = eclipse_check(astrolist, last_time_eclipse)
+
         # positions.append([i.position for i in astrolist.get_free_astros()])
         # com.append(astrolist.center_of_mass)
         # kinetic_energy.append(astrolist.kinetic_energy())
@@ -64,7 +73,7 @@ def main():
     print("                                           ", end = "\r")
     print("Simulation complete!")
 
-    # save_positions([[i.position for i in astrolist.get_all_astros()] for astrolist in astrolist_states]) # Saves all positions in different files for each astro
+    save_positions(astrolist_states) # Saves all positions in different files for each astro
     times = np.array([astrolist.time for astrolist in astrolist_states])
     
     angular_momentum = np.array([astrolist.angular_momentum() for astrolist in astrolist_states])
@@ -78,6 +87,7 @@ def main():
     
     plt.plot(times, (z_angular_momentum-np.mean(z_angular_momentum))/np.mean(z_angular_momentum))
     plt.title('Relative deviation of\n the z component of total Angular momentum')
+    plt.savefig('output_data/angular_momentum.svg')
     plt.show()
     
     angular_momentum = None
@@ -85,12 +95,15 @@ def main():
     y_angular_momentum = None
     z_angular_momentum = None
 
+    
+
 
     total_energy = np.array([astrolist.potential for astrolist in astrolist_states]) + np.array([astrolist.kinetic_energy() for astrolist in astrolist_states])
     
     print(f"Variation of the energy: {(np.max(total_energy)-np.min(total_energy))/(np.mean(total_energy))}")
     plt.plot(times, (total_energy-np.mean(total_energy))/np.mean(total_energy))
     plt.title('Relative deviation of Energy')
+    plt.savefig('output_data/energy_conservation.svg')
     plt.show()
     
     total_energy = None
@@ -103,16 +116,24 @@ def main():
         plt.plot([j[i][0] for j in positions], [j[i][1] for j in positions])
     plt.plot([i[0] for i in com], [i[1] for i in com], marker="o")
     plt.gca().set_aspect('equal')
+    plt.savefig("output_data/position_output.svg")
     plt.show()
 
     plt.plot([i[0] for i in com], [i[1] for i in com])
     plt.title("COM")
+    plt.savefig("output_data/COM.svg")
     plt.show()
     positions = None
     com = None
     
-    
-    create_animation(astrolist_states[::params.animation_step], "animation")
+
+    # Check the moon phase on New Years Eve
+
+    get_moon_phase(astrolist_states[-1],"output_data/moon_phase")
+
+
+    create_animation(astrolist_states[::params.animation_step], "output_data/animation")
+
 
 if __name__ == "__main__":
     main()
