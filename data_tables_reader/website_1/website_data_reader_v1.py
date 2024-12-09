@@ -1,14 +1,32 @@
+# -*- coding: utf-8 -*-
 """
+This script is a BETA VERSION, that was abandoned to the version .v2, that works
+with the files from a NASA webpage, being more precise.
+It's unused and has hardly been documented.
+
 This module will get two .txt files with a copy from the position of astros 
 given by the following website:
+
   http://cosinekitty.com/solar_system.html
-and write a new txt file including the name, position and velocities of this astros.
+
+And then write a new txt file including the name, position and velocities of this astros.
 Valocities will be computed using differences of the position.
+
+
+This module was left because the time span needed to calculate the velocities for different 
+astros (as diferentials in position) is inmensely different, making the idea unuseful.  :(
+
+Created on Wed Oct 30 2024
+
+@author: raul
 """
 
 import numpy as np
 
 def rewrite_table_web(og_file_name: str):
+    """  
+    Write the new table.txt file
+    """
     with open(og_file_name, 'rt') as file:
         lineas = []
         for n, line in enumerate(file.readlines()):
@@ -34,6 +52,9 @@ def rewrite_table_web(og_file_name: str):
 
 
 def create_data_file_from_website(file_name1: str, file_name2: str, delta_time: float):
+    """
+    Extract data from the two files
+    """
     astros = []
     positions_1 = np.array([])
     positions_2 = np.array([])
@@ -86,7 +107,7 @@ def position_velocity_file(file1:str, file2:str, dt:float):
     create_data_file_from_website(new_file1, new_file2, dt)
 
 
-# EJEMPLO DE USO
+# Create data file
 position_velocity_file("./data_tables_reader/website_1/posiciones1.txt","./data_tables_reader/website_1/posiciones2.txt",1)
 
         
