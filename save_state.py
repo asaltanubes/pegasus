@@ -1,4 +1,5 @@
 from astros import AstroList
+import os
 
 #
 """
@@ -17,7 +18,7 @@ file
 """
 
 # a partir de una lista de objetos AstroList
-def save_positions(positions: list[AstroList]):
+def save_positions(list_astros: list[AstroList]):
     """
     Saves position data for celestial bodies to data files.
 
@@ -29,13 +30,15 @@ def save_positions(positions: list[AstroList]):
         positions: A list of AstroList objects containing position and properties of celestial bodies
     """
     # Me gustaria que los datos se guarden en una carpeta
-    for astro in positions[0].get_all_astros(): # Para cada planeta
-        file_name = f"./output_data/{astro.name}.dat"
+    for astro in list_astros[0].get_all_astros(): # Para cada planeta
+        file_name = f"output_data/astro_data/{astro.name}.dat"
+        os.makedirs(os.path.dirname(file_name), exist_ok=True)
         with open(file_name,'w') as data_file:
             data_file.write(f"{astro.name},  {astro.mass} \n")
-            for astrolist in positions:
-                data_file.write(','.join([str(x) for x in astro.position]))
-                # data_file.write(astro.velocity +',')
-                # data_file.write(astro.potential_energy +',')
+            for astrolist in list_astros:
+                data_file.write(','.join([str(x) for x in astro.position] +
+                                         [str(x) for x in astro.pos_com] +
+                                         [str(x) for x in astro.velocity] + 
+                                         [str(x) for x in astro.force] + 
+                                         [str(astro.potential)]))
                 data_file.write('\n')
-        data_file.close()
