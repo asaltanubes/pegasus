@@ -17,10 +17,18 @@ from kepler import kepler
 - use velocity read se está teniendo en cuenta?
 - plot sin ejes con fondo negro para el power point
 - ¿¿Guardar input: initial_conditions y simulation_parameters??
-
+"""
+"""
+   *    ✧    *    ·    ⋆    *    ✧    *     ·     *
+ ✦   ____       *                    ✧           *
+*   |  _ |_____  __ _  __ _ ___ _   _ ___    ⋆
+  * | |_) / _ |/ __` |/__` / __| | | / __|  *   ·
+✧   |  __/  __/ (_| | (_| |__ | |_| |__ |    *
+ *  |_|   |___|___, ||__,_|___/|__,_|___/  ✧    *
+  *            |___/     *    ·     *    ⋆
+    *    ·     *    ✧    *    ·     *    ✧     *
 
 """
-
 
 """
 This script runs a simulation for the system given in initial_conditions.ini.
