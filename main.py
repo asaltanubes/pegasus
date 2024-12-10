@@ -7,6 +7,7 @@ from animation import create_animation
 from save_state import save_positions
 from eclipse_search import *
 from moon_phase import get_moon_phase
+from kepler import kepler
 """
 - Añadir progreso a la ejecución del programa ?
 - borrar diff_eq, initial_test, notebook
@@ -17,12 +18,6 @@ from moon_phase import get_moon_phase
 - plot sin ejes con fondo negro para el power point
 - ¿¿Guardar input: initial_conditions y simulation_parameters??
 
-Por alguna razón que escapa completamente a mi entendimiento, Junquera hace esto para la Luna cunado está leyendo el file de los astros:
-
-    if name_astro == "Moon":
-        speed_astro = np.sqrt( np.longdouble(G) * mass_sun / np.longdouble(149597871.0e3)) + np.sqrt( np.longdouble(G) * np.longdouble(5.9724e24) / np.longdouble(384400.0e3))
-        velocity_astro = np.array([0.0,speed_astro,0.0],dtype=np.longdouble)
-        astro.set_velocity( velocity_astro )
 
 """
 
@@ -60,7 +55,7 @@ def main():
     # theta0_earth = np.arctan2(earth.position[1], earth.position[0])
 
     # All astrolist are stored
-    astrolist_states = np.array([])
+    astrolist_states = []
     step = 0
 
     # For the functioning of the eclipse search
@@ -69,11 +64,11 @@ def main():
     # Propagate the astrolist state for given final_state
     while astrolist.time < final_time:
         print(f"Simulation is {astrolist.time.item()/final_time*100:.3f}% complete!", end="\r")
-        astrolist = verlet.advance_time(astrolist, params.delta_time+astrolist.time)
-        astrolist_states = np.append(astrolist_states, astrolist.copy())
+        astrolist = verlet.advance_time(astrolist, params.interval_data_save*params.delta_time+astrolist.time)
+        astrolist_states.append(astrolist.copy())
         
         #  Check for eclipses over the time of simulation
-        last_time_eclipse = eclipse_check(astrolist, last_time_eclipse)
+        # last_time_eclipse = eclipse_check(astrolist, last_time_eclipse)
 
         # positions.append([i.position for i in astrolist.get_free_astros()])
         # com.append(astrolist.center_of_mass)
@@ -114,9 +109,6 @@ def main():
     y_angular_momentum = None
     z_angular_momentum = None
 
-    
-
-
     total_energy = np.array([astrolist.potential for astrolist in astrolist_states]) + np.array([astrolist.kinetic_energy() for astrolist in astrolist_states])
     
     print(f"Variation of the energy: {(np.max(total_energy)-np.min(total_energy))/(np.mean(total_energy))}")
@@ -145,13 +137,14 @@ def main():
     positions = None
     com = None
     
+    kepler(astrolist_states)
 
     # Check the moon phase on New Years Eve
 
     get_moon_phase(astrolist_states[-1],"output_data/moon_phase")
 
 
-    create_animation(astrolist_states[::params.animation_step], "output_data/animation")
+    create_animation(astrolist_states[::params.animation_step//params.interval_data_save], "output_data/animation")
 
 
 if __name__ == "__main__":

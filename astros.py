@@ -268,6 +268,7 @@ class AstroList:
         free_astros = [astro.copy() for astro in self.__astros]
         alist = AstroList(free_astros, fixed_astros, self.time)
         alist.center_of_mass = self.center_of_mass.copy()
+        alist.potential=self.potential.copy()
         return alist
 
     def __str__(self) -> str:

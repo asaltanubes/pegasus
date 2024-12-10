@@ -1,18 +1,52 @@
 import numpy as np
 from astros import AstroList, Astro
+import matplotlib.pyplot as plt
 
 
 
-def new_year(list_astros: list[AstroList]) -> float:
-    theta_0 = [np.arctan2(astro.position[1], astro.position[0]) for astro in list_astros[0].get_all_astros()]
+def new_year(list_astros: list[Astro]) -> float:
+    positions = [i.pos_com for i in list_astros]
+    initial_velocity = list_astros[0].velocity
+    initial_r = positions[0]
 
-    theta = [np.arctan2(astro.position[1], astro.position[0]) for astro in list_astros[0].get_all_astros()]
-    # if np.abs(theta0_earth-theta_earth) < np.pi/(360*12):
-    #     print(f"New year!: {astrolist.time/(3600*24)} day")
+    mul_vector = initial_r + np.dot(initial_r, initial_r)/np.dot(initial_velocity, initial_r) * initial_velocity
 
-    for astrolist in list_astros:
-        for astro in astrolist:
+    dots = positions@mul_vector
+    # Aplying bolzano's theorem
+    zero_arrays = dots[1:]*dots[:-1]
+    indices = np.argwhere(zero_arrays <= 0)
+    
+    return indices.flatten()
+
+    
             
+
+def kepler(list_astros: list[AstroList]):
+    try:
+        time_array = np.array([astro.time for astro in list_astros])
+        astros = np.transpose([[astro for astro in astrolist.get_free_astros() if astro.name != "sun" and astro.name != "moon"] for astrolist in list_astros])
+        half_year_times = [new_year(astro_times) for astro_times in astros]
+
+        which_astros_have_half_a_year = [len(i)>2 for i in half_year_times]
+        # print(which_astros_have_half_a_year)
+        # print(half_year_times)
+
+        half_year_time_arrays = [time_array[half_year_by_planet] for astro_has_enough_data, half_year_by_planet in 
+                                            zip(which_astros_have_half_a_year, half_year_times) if astro_has_enough_data]
+        # print([np.mean(half_year_times[1:]-half_year_times[:-1]) for half_year_times in half_year_time_arrays])
+        mean_year_duration = 2*np.array([np.mean(half_year_times[1:]-half_year_times[:-1]) for half_year_times in half_year_time_arrays])
+        positions = np.array([[i.pos_com for i in astro_times] for astro_has_enough_data, astro_times in zip(which_astros_have_half_a_year, astros) if astro_has_enough_data])
+        radious_norm_max = np.max(np.array(np.linalg.norm(positions, axis=2)), axis=1)
+        plt.scatter(np.log(radious_norm_max), np.log(mean_year_duration))
+        print(r(np.log(radious_norm_max), np.log(mean_year_duration)))
+        pen, dpen, n0, dn0 = least_squares(np.log(radious_norm_max), np.log(mean_year_duration))
+        print(pen, dpen, n0, dn0)
+        xx = np.linspace(np.min(np.log(radious_norm_max)), np.max(np.log(radious_norm_max)))
+        plt.plot(xx, pen*xx+n0)
+
+        plt.show()
+    except:
+        print("Not enough data for kepler simulation")
 
 
 def r(x: list[float], y: list[float]):

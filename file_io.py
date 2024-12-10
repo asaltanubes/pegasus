@@ -27,6 +27,7 @@ class ConfigParams:
         self.plot_skip_steps = params["plot_skip_steps"]
         self.use_velocity_read = params["use_velocity_read"]
         self.animation_step = params["animation_step"]
+        self.interval_data_save = params["interval_data_save"]
 
     def __str__(self) -> str:
         """Returns string representation of the configuration parameters"""
@@ -91,7 +92,7 @@ def load_configuration(file: str) -> ConfigParams:
     The configuration file should contain key-value pairs for parameters.
     Default values are used for any parameters not specified in the file.
     """
-    defaults = {"delta_time": 3600, "number_steps": 365*24, "interval_print_energy": 10000, "interval_print_coor": 10000, "plot_skip_steps": 100, "use_velocity_read": False, "animation_step": 0, "eclipse": []}
+    defaults = {"delta_time": 3600, "number_steps": 365*24, "interval_print_energy": 10000, "interval_print_coor": 10000, "plot_skip_steps": 100, "use_velocity_read": False, "animation_step": 0, "eclipse": [], "interval_data_save": 1}
 
     with open(file, "rt") as f:
         for n, line in enumerate(f.readlines()):
