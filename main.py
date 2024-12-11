@@ -109,6 +109,8 @@ def main():
     
     plt.plot(times, (z_angular_momentum-np.mean(z_angular_momentum))/np.mean(z_angular_momentum))
     plt.title('Relative deviation of\n the z component of total Angular momentum')
+    plt.xlabel(r"$t/\text{s}$")
+    plt.ylabel(r"$L_z/\text{kg m}^2 \text{s}^{-1}$")
     plt.savefig('output_data/angular_momentum.svg')
     plt.show()
     
@@ -121,7 +123,9 @@ def main():
     
     print(f"Variation of the energy: {(np.max(total_energy)-np.min(total_energy))/(np.mean(total_energy))}")
     plt.plot(times, (total_energy-np.mean(total_energy))/np.mean(total_energy))
-    plt.title('Relative deviation of Energy')
+    plt.title('Relative deviation of the Energy')
+    plt.xlabel(r"$t/\text{s}$")
+    plt.ylabel(r"$E/\text{J}$")
     plt.savefig('output_data/energy_conservation.svg')
     plt.show()
     
@@ -135,11 +139,15 @@ def main():
         plt.plot([j[i][0] for j in positions], [j[i][1] for j in positions])
     plt.plot([i[0] for i in com], [i[1] for i in com], marker="o")
     plt.gca().set_aspect('equal')
+    plt.xlabel(r"$x$/m")
+    plt.ylabel(r"$y$/m")
     plt.savefig("output_data/position_output.svg")
     plt.show()
-
+    plt.xlabel(r"$x$/m")
+    plt.ylabel(r"$y$/m")
     plt.plot([i[0] for i in com], [i[1] for i in com])
     plt.title("COM")
+
     plt.savefig("output_data/COM.svg")
     plt.show()
     positions = None

@@ -27,7 +27,7 @@ def kepler(list_astros: list[AstroList]):
         astros = np.transpose([[astro for astro in astrolist.get_free_astros() if astro.name != "sun" and astro.name != "moon"] for astrolist in list_astros])
         half_year_times = [new_year(astro_times) for astro_times in astros]
 
-        which_astros_have_half_a_year = [len(i)>2 for i in half_year_times]
+        which_astros_have_half_a_year = [len(i)>=2 for i in half_year_times]
         # print(which_astros_have_half_a_year)
         # print(half_year_times)
 
@@ -42,8 +42,11 @@ def kepler(list_astros: list[AstroList]):
         pen, dpen, n0, dn0 = least_squares(np.log(radious_norm_max), np.log(mean_year_duration))
         print(pen, dpen, n0, dn0)
         xx = np.linspace(np.min(np.log(radious_norm_max)), np.max(np.log(radious_norm_max)))
-        plt.plot(xx, pen*xx+n0)
-
+        plt.plot(xx, pen*xx+n0, c="red", zorder=-1)
+        plt.xlabel(r"$\ln(a/\text{m})$")
+        plt.ylabel(r"$\ln(T/\text{s})$")
+        plt.title(f"Slope = {pen:.3f}±{dpen:.3f} n0 = {n0:.3f}±{dn0:.3f}")
+        plt.savefig("output_data/kepler.svg")
         plt.show()
     except:
         print("Not enough data for kepler simulation")
