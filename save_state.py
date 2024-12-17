@@ -18,7 +18,7 @@ file
 """
 
 # a partir de una lista de objetos AstroList
-def save_positions(list_astros: list[AstroList]):
+def save_astros(list_astros: list[AstroList]):
     """
     Saves position data for celestial bodies to data files.
 

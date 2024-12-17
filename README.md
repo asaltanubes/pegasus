@@ -20,7 +20,7 @@ Pegasus is a Python-based astronomical simulation tool that models the motion of
 The only required dependencies are numpy and matplotlib. They can be installed using pip:
 
 ```bash
-pip install numpy matplotlib tqdm
+pip install numpy matplotlib
 ```
 
 ## Usage
@@ -53,11 +53,13 @@ Delta_time          3600
 Number_steps        24*345
 # Steps between data saves
 Interval_data_save  10
-# Steps between animation frames
+# Steps between animation frames. If zero or not especified, animation won't be created
 animation_step      100
+# Astros to check for eclipse. First the star, then the moon and the planet followed by their radius
+eclipse   sun, moon, 1737500, earth, 6378000
 ```
 
-The configuration files support two key features: line-based comments that can be added using the `#` symbol, and the ability to perform simple mathematical operations like addition or multiplication within parameter values (as long as there are no spaces bewteen numbers and operators).
+The configuration files support two key features: line-based comments that can be added using the `#` symbol, and the ability to perform simple mathematical operations like addition or multiplication within parameter values.
 
 ### Running the Simulation
 

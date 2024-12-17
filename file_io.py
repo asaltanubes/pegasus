@@ -22,17 +22,14 @@ class ConfigParams:
         """
         self.delta_time = params["delta_time"]
         self.number_steps = params["number_steps"]
-        self.interval_print_energy = params["interval_print_energy"]
-        self.interval_print_coor = params["interval_print_coor"]
-        self.plot_skip_steps = params["plot_skip_steps"]
-        self.use_velocity_read = params["use_velocity_read"]
         self.animation_step = params["animation_step"]
         self.interval_data_save = params["interval_data_save"]
+        self.eclipse = params["eclipse"]
 
     def __str__(self) -> str:
         """Returns string representation of the configuration parameters"""
-        return f"  Delta time: {self.delta_time}\n  Number of steps: {self.number_steps}\n  Interval for printing energy: {self.interval_print_energy}\n"+\
-               f"  interval print coordinates: {self.interval_print_coor}\n  Plot skip steps: {self.plot_skip_steps}\n  Use velocity read: {self.use_velocity_read}\n  Animation step: {self.animation_step}"
+        return f"  Delta time: {self.delta_time}\n  Number of steps: {self.number_steps}\n  Animation step: {self.animation_step}\n" +\
+               f"  Interval data save: {self.interval_data_save}\n  Eclipse: {self.eclipse}"
 
 def load_initial_condition(file: str) -> AstroList:
     """
@@ -92,7 +89,7 @@ def load_configuration(file: str) -> ConfigParams:
     The configuration file should contain key-value pairs for parameters.
     Default values are used for any parameters not specified in the file.
     """
-    defaults = {"delta_time": 3600, "number_steps": 365*24, "interval_print_energy": 10000, "interval_print_coor": 10000, "plot_skip_steps": 100, "use_velocity_read": False, "animation_step": 0, "eclipse": [], "interval_data_save": 1}
+    defaults = {"delta_time": 3600, "number_steps": 365*24, "animation_step": 0, "eclipse": [], "interval_data_save": 1}
 
     with open(file, "rt") as f:
         for n, line in enumerate(f.readlines()):
@@ -101,12 +98,11 @@ def load_configuration(file: str) -> ConfigParams:
             if line.strip()[0] == '#':
                 continue
 
-            key, value = line.split()
-            for (k, _) in defaults.items():
-                if key.lower().strip() == k:
-                    if k == "use_velocity_read":
-                        defaults[k] = parse_bool(value, file, n, line)
-                    elif k == "delta_time":
+            line_parts = line.split()
+            key, value = line_parts[0].lower().strip(), "".join(line_parts[1:]).strip()
+            for k in defaults.keys():
+                if key == k:
+                    if k == "delta_time":
                         defaults[k] = float(eval(value))
                     elif k == "eclipse":
                         defaults[k] = [i.strip() for i in value.split(",")]

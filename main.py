@@ -4,7 +4,7 @@ from file_io import *
 import matplotlib.pyplot as plt
 import numpy as np
 from animation import create_animation
-from save_state import save_positions
+from save_state import save_astros
 from eclipse_search import *
 from moon_phase import get_moon_phase
 from kepler import kepler
@@ -95,7 +95,7 @@ def main():
     print("Simulation complete!")
 
     # Saves all positions in different files for each astro
-    save_positions(astrolist_states) 
+    save_astros(astrolist_states)
     times = np.array([astrolist.time for astrolist in astrolist_states])
     
     angular_momentum = np.array([astrolist.angular_momentum() for astrolist in astrolist_states])
@@ -160,7 +160,8 @@ def main():
     get_moon_phase(astrolist_states[-1],"output_data/moon_phase")
 
 
-    create_animation(astrolist_states[::params.animation_step//params.interval_data_save], "output_data/animation")
+    if params.animation_step != 0:
+        create_animation(astrolist_states[::params.animation_step//params.interval_data_save], "output_data/animation")
 
 
 if __name__ == "__main__":
