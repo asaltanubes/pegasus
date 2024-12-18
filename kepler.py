@@ -1,3 +1,13 @@
+# -*- coding: utf-8 -*-
+"""
+Script dedicated to...
+
+Created on Wed Dic 4 2024
+
+@author: gustavo
+"""
+ 
+
 import numpy as np
 from astros import AstroList, Astro
 import matplotlib.pyplot as plt
@@ -21,35 +31,43 @@ def new_year(list_astros: list[Astro]) -> float:
     
             
 
-def kepler(list_astros: list[AstroList]):
-    try:
-        time_array = np.array([astro.time for astro in list_astros])
-        astros = np.transpose([[astro for astro in astrolist.get_free_astros() if astro.name != "sun" and astro.name != "moon"] for astrolist in list_astros])
-        half_year_times = [new_year(astro_times) for astro_times in astros]
+def kepler(list_astros: list[AstroList], star_name: str, satellite_name: str, show_plot: bool = True):
+    """
+    'Description'
+    
+    Args:
+        arg_1 (class): description
 
-        which_astros_have_half_a_year = [len(i)>=2 for i in half_year_times]
-        # print(which_astros_have_half_a_year)
-        # print(half_year_times)
+    Returns (type):  
+        Description
+    
+    """
+    time_array = np.array([astro.time for astro in list_astros])
+    astros = np.transpose([[astro for astro in astrolist.get_free_astros() if astro.name != star_name and astro.name != satellite_name] for astrolist in list_astros])
+    half_year_times = [new_year(astro_times) for astro_times in astros]
 
-        half_year_time_arrays = [time_array[half_year_by_planet] for astro_has_enough_data, half_year_by_planet in 
-                                            zip(which_astros_have_half_a_year, half_year_times) if astro_has_enough_data]
-        # print([np.mean(half_year_times[1:]-half_year_times[:-1]) for half_year_times in half_year_time_arrays])
-        mean_year_duration = 2*np.array([np.mean(half_year_times[1:]-half_year_times[:-1]) for half_year_times in half_year_time_arrays])
-        positions = np.array([[i.pos_com for i in astro_times] for astro_has_enough_data, astro_times in zip(which_astros_have_half_a_year, astros) if astro_has_enough_data])
-        radious_norm_max = np.max(np.array(np.linalg.norm(positions, axis=2)), axis=1)
-        plt.scatter(np.log(radious_norm_max), np.log(mean_year_duration))
-        print(r(np.log(radious_norm_max), np.log(mean_year_duration)))
-        pen, dpen, n0, dn0 = least_squares(np.log(radious_norm_max), np.log(mean_year_duration))
-        print(pen, dpen, n0, dn0)
-        xx = np.linspace(np.min(np.log(radious_norm_max)), np.max(np.log(radious_norm_max)))
-        plt.plot(xx, pen*xx+n0, c="red", zorder=-1)
-        plt.xlabel(r"$\ln(a/\text{m})$")
-        plt.ylabel(r"$\ln(T/\text{s})$")
-        plt.title(f"Slope = {pen:.3f}±{dpen:.3f} n0 = {n0:.3f}±{dn0:.3f}")
-        plt.savefig("output_data/kepler.svg")
-        plt.show()
-    except:
+    which_astros_have_half_a_year = [len(i)>=2 for i in half_year_times]
+    if len([i for i in which_astros_have_half_a_year if i]) < 2:
         print("Not enough data for kepler simulation")
+        return
+
+    half_year_time_arrays = [time_array[half_year_by_planet] for astro_has_enough_data, half_year_by_planet in 
+                                        zip(which_astros_have_half_a_year, half_year_times) if astro_has_enough_data]
+    mean_year_duration = 2*np.array([np.mean(half_year_times[1:]-half_year_times[:-1]) for half_year_times in half_year_time_arrays])
+    positions = np.array([[i.pos_com for i in astro_times] for astro_has_enough_data, astro_times in zip(which_astros_have_half_a_year, astros) if astro_has_enough_data])
+    radious_norm_max = np.max(np.array(np.linalg.norm(positions, axis=2)), axis=1)
+    plt.scatter(np.log(radious_norm_max), np.log(mean_year_duration))
+    print(r(np.log(radious_norm_max), np.log(mean_year_duration)))
+    pen, dpen, n0, dn0 = least_squares(np.log(radious_norm_max), np.log(mean_year_duration))
+    print(pen, dpen, n0, dn0)
+    xx = np.linspace(np.min(np.log(radious_norm_max)), np.max(np.log(radious_norm_max)))
+    plt.plot(xx, pen*xx+n0, c="red", zorder=-1)
+    plt.xlabel(r"$\ln(a/\text{m})$")
+    plt.ylabel(r"$\ln(T/\text{s})$")
+    plt.title(f"Slope = {pen:.3f}±{dpen:.3f} n0 = {n0:.3f}±{dn0:.3f}")
+    plt.savefig("output_data/kepler.svg")
+    if show_plot:
+        plt.show()
 
 
 def r(x: list[float], y: list[float]):

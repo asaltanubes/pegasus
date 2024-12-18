@@ -46,7 +46,7 @@ def read_files(number_of_files: int):
         file.truncate(0)
 
         #  Write the header with legend
-        file.write('# Name, x, y, z, vx, vy, vz (DATE------ on last line)\n')
+        file.write('# Name, x, y, z, vx, vy, vz (DATE: on last line)\n')
         
     # Open each astro file 
     for i in range(0,number_of_files):
@@ -121,7 +121,7 @@ def read_files(number_of_files: int):
     # Finally, saves the date of the position and velocity data. Without it, data would be worthless
     with open(output_file_name, 'a')  as file:
 
-        file.write('#\t'+ date_line + '\n')
+        file.write('#\t DATE: '+ date_line + '\n')
     
 
 

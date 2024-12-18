@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
- 
+"""
+Script dedicated to...
+
+Created on Wed Dic 4 2024
+
+@author: oscar, gustavo
+"""
  
 from matplotlib.collections import PathCollection
 import matplotlib.pyplot as plt
@@ -18,13 +24,6 @@ def create_animation(lists: list[AstroList], filename: str):
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
 
-    ax.set_xlabel('X')
-    ax.set_ylabel('Y')
-    ax.set_zlabel('Z')
-
-    # ax.set_xlim(0, 30)
-    # ax.set_ylim(0, 30)
-    # ax.set_zlim(0, 30)
     colors = ["yellow", "gray", "orange", "blue", "lightgray", "red", "khaki", "burlywood", "paleturquoise", "cornflowerblue"]
     colors = colors + [((randrange(0, 256)/255, randrange(0, 256)/255, randrange(0, 256)/255),) for _ in range(len(lists[0].get_all_astros()) - len(colors))]
 
@@ -51,9 +50,10 @@ def create_animation(lists: list[AstroList], filename: str):
 
     ax.legend(loc = (-0.35, 0.3), labels=[i.name for i in lists[0].get_all_astros()], )
     ax.set_aspect("equal", adjustable="datalim")
-    ax.axis("off")
+    # ax.axis("off")
     # ax.view_init(90, -90)
     ax.set_facecolor("black")
+    ax.tick_params(left = False, right = False , labelleft = False, labelbottom = False, bottom = False) 
     anim = animation.ArtistAnimation(fig, frames)
     print("Saving...")
     anim.save(f'{filename}.gif', fps=30)

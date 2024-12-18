@@ -1,4 +1,13 @@
 # -*- coding: utf-8 -*-
+"""
+Description
+
+Created on Wed Dic 4 2024
+
+@author: gustavo
+"""
+
+
 import numpy as np
 from astros import AstroList, float_type
 

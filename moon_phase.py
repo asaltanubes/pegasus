@@ -4,7 +4,7 @@ The following script studies Moon phases, their nomenclature
 and exact representation given a certain position between the 
 Sun, Moon and Earth.
 
-Cropped picture of rhe Moon from the original: Luc Viatour / https://Lucnix.be https://creativecommons.org/licenses/by-sa/3.0/
+Cropped picture of the Moon from the original: Luc Viatour / https://Lucnix.be https://creativecommons.org/licenses/by-sa/3.0/
 
 Created on Wed Nov 27 2024
 
@@ -17,7 +17,7 @@ from eclipse_search import seconds_to_years
 
 
 
-def get_moon_phase(system: AstroList, filename: str):
+def get_moon_phase(system: AstroList, filename: str, show_plot: bool):
     """
     Prints an exact simulation of the moon phase and its English name given
     an Astrolist. Will let the user know the moon phase in any given point of time.
@@ -96,7 +96,8 @@ def get_moon_phase(system: AstroList, filename: str):
     # plt.axis('off')   
     # plt.axis("equal")
     plt.savefig(f'{filename}.svg')
-    plt.show()
+    if show_plot:
+        plt.show()
 
     # TESTING
     # theta_vec = np.pi/180*np.array([5,40,90,120,180,200,270,290,355])

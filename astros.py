@@ -6,11 +6,6 @@ import numpy as np
 
 float_type = np.longdouble
 
-# def gravitational_pull(i_position: np.ndarray, j_position: np.ndarray, i_mass: float_type, j_mass: float_type):
-#     G = float_type(6.6743e-11)
-#     r = j_position-i_position
-#     return G * i_mass*j_mass/(np.linalg.norm(r)**3)*r
-
 class Astro:
     """
     Class representing an astronomical object with position, velocity, mass and other physical properties.
@@ -200,10 +195,10 @@ class AstroList:
                     fixed_astro.potential += potential
         return np.array([self.__astros[i].force/masses[i] for i in range(len(self.__astros))])
 
-    def update_state(self, yp, y, t, forces = None, potentials = None):
+    def update_state(self, yp, y, t):
         """
-        Update positions, velocities and center of mass for all objects
-
+        Updates the postitions, velocities and time of the AstroList
+        
         Args:
             yp: List of velocities for each object
             y: List of positions for each object
@@ -216,8 +211,6 @@ class AstroList:
             astro.position = r
             astro.pos_com = astro.position-self.center_of_mass
             astro.velocity = v
-            # astro.force = f
-            # astro.potential = p
 
         self.time = t
 
@@ -274,56 +267,3 @@ class AstroList:
     def __str__(self) -> str:
         """Get string representation of AstroList showing fixed and non-fixed objects"""
         return f"AstroList:\n  Free astros:\n    "+"\n    ".join(str(i) for i in self.__astros)+"\n  Fixed astros:\n    " + "\n    ".join(str(i) for i in self.__fixed_astros)
-
-# sol = Astro([0, 0, 0], [0, 0, 0], 1.989e30)
-# tierra = Astro([150e9, 0, 0], [0, 29800, 0], 5.972e24)
-
-# solar_system = AstroList([sol, tierra])
-
-# s = []
-# t = []
-# vs = []
-# vt = []
-
-# dt = 20
-# n  = 365
-# import time
-# start = time.time()
-# simtime = 365*24*3600/n
-# for i in range(n):
-#     solar_system.simulate(simtime, dt)
-#     posi = solar_system.positions_2d()
-#     vel = solar_system.velocities_2d()
-#     s.append(posi[0])
-#     t.append(posi[1])
-#     vs.append(vel[0])
-#     vt.append(vel[1])
-# end = time.time()
-# print("simulation_complete")
-
-# print(end-start)
-
-# Lt = np.array([(pos[0]*vel[1]-pos[1]*vel[0])*tierra.mass for pos, vel in zip(t, vt)])
-# Ls = np.array([(pos[0]*vel[1]-pos[1]*vel[0])*sol.mass for pos, vel in zip(s, vs)])
-# Ltotal = Ls+Lt
-
-
-# plt.scatter([i[0] for i in s], [i[1] for i in s])
-
-# plt.plot([i[0] for i in t], [i[1] for i in t])
-
-# # ax = plt.gca()
-# # ax.set_aspect('equal', adjustable='box')
-
-# plt.show()
-
-# print(f"Relative error in Lt: {(max(Lt)-min(Lt))/sum(Lt)*len(Lt)}")
-# print(f"Relative error in Ls: {(max(Ls)-min(Ls))/sum(Ls)*len(Ls)}")
-# print(f"Relative error in Ltotal: {(max(Ltotal)-min(Ltotal))/sum(Ltotal)*len(Ltotal)}")
-
-# times = [simtime*i for i in range(n)]
-# plt.plot(times, Lt, label="Tierra")
-# # plt.plot(times, Ls, label="Sol")
-# plt.plot(times, Ltotal, label="total")
-# plt.legend()
-# plt.show()

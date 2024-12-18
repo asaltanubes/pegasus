@@ -1,24 +1,9 @@
-from astros import *
-from verlet import *
-from file_io import *
-import matplotlib.pyplot as plt
-import numpy as np
-from animation import create_animation
-from save_state import save_astros
-from eclipse_search import *
-from moon_phase import get_moon_phase
-from kepler import kepler
+# -*- coding: utf-8 -*-
 """
-- Añadir progreso a la ejecución del programa ?
-- borrar diff_eq, initial_test, notebook
-- borrar mucho codigo comentado por ahi
-- update_forces sirve para algo?
-- update_state necesita forces y potential?
-- use velocity read se está teniendo en cuenta?
-- plot sin ejes con fondo negro para el power point
-- ¿¿Guardar input: initial_conditions y simulation_parameters??
-"""
-"""
+Main script of the code, runs a simulation for the system given in initial_conditions.ini.
+It propagates the state of the astronomical system over the given Delta_time*Number_steps 
+specified in the simulation_parameters. Afterwards, it saves several graphs and displays results.
+
    *    ✧    *    ·    ⋆    *    ✧    *     ·     *
  ✦   ____       *                    ✧           *
 *   |  _ |_____  __ _  __ _ ___ _   _ ___    ⋆
@@ -28,18 +13,39 @@ from kepler import kepler
   *            |___/     *    ·     *    ⋆
     *    ·     *    ✧    *    ·     *    ✧     *
 
+Created on Wed Oct 9 2024
+
+@author: gustavo, oscar
 """
 
+import matplotlib.pyplot as plt
+import numpy as np
+
+from astros import *
+from verlet import *
+from file_io import *
+from animation import create_animation
+from save_state import save_astros
+from eclipse_search import *
+from moon_phase import get_moon_phase
+from kepler import kepler
 """
-This script runs a simulation for the system given in initial_conditions.ini.
-It propagates the state of the astronomical system over the given Delta_time*Number_steps 
-specified in the simulation_parameters. Afterwards, it saves several graphs and displays results.
+- borrar mucho codigo comentado por ahi
+- update_forces sirve para algo?
+- ¿¿Guardar input: initial_conditions y simulation_parameters??
 """
 
 
 def main():
     """
-    Description
+    Main function, runs the simulation for the given initial data and parameters, 
+    propagates the state of the system over time. Prints initial data and parameters, runs simulation 
+    while showing a progress bar. Finally, saves the positions in the output_data folder.
+    Pots and saves grpahs for angular momentum, energy and position over time.
+
+    Additionally, searches for eclipses using the eclipse_search feature 
+    and displays dates on terminal. Finds the moon phase for the last day of the year
+    using moon_phase. Finally checks Kepler Laws using kepler functionality
     """
 
     # Read the initial conditions
@@ -57,7 +63,6 @@ def main():
     print(f"Initial conditions \n {astrolist}")
     print()
     print(f"Parameters: \n{params}")
-    print(repr(astrolist.time))
 
     # earth = astrolist.get_astro_by_name("earth")
     # theta0_earth = np.arctan2(earth.position[1], earth.position[0])
@@ -76,20 +81,7 @@ def main():
         astrolist_states.append(astrolist.copy())
         
         #  Check for eclipses over the time of simulation
-        # last_time_eclipse = eclipse_check(astrolist, last_time_eclipse)
-
-        # positions.append([i.position for i in astrolist.get_free_astros()])
-        # com.append(astrolist.center_of_mass)
-        # kinetic_energy.append(astrolist.kinetic_energy())
-        # potential.append(astrolist.potential)
-        # astro_positions.append(astrolist.copy())  # Rulo test
-
-        # angular_momentum.append(astrolist.angular_momentum())
-
-        # times.append(astrolist.time)
-        # theta_earth = np.arctan2(earth.position[1], earth.position[0])
-        # if np.abs(theta0_earth-theta_earth) < np.pi/(360*12):
-        #     print(f"New year!: {astrolist.time/(3600*24)} day")
+        last_time_eclipse = eclipse_check(astrolist, last_time_eclipse)
         step += 1
     print("                                           ", end = "\r")
     print("Simulation complete!")
@@ -112,7 +104,9 @@ def main():
     plt.xlabel(r"$t/\text{s}$")
     plt.ylabel(r"$L_z/\text{kg m}^2 \text{s}^{-1}$")
     plt.savefig('output_data/angular_momentum.svg')
-    plt.show()
+    if params.show_plots:
+      plt.show()
+    plt.cla()
     
     angular_momentum = None
     x_angular_momentum = None
@@ -127,8 +121,9 @@ def main():
     plt.xlabel(r"$t/\text{s}$")
     plt.ylabel(r"$E/\text{J}$")
     plt.savefig('output_data/energy_conservation.svg')
-    plt.show()
-    
+    if params.show_plots:
+      plt.show()
+    plt.cla()
     total_energy = None
 
     positions = [[i.position for i in astrolist.get_all_astros()] for astrolist in astrolist_states]
@@ -142,22 +137,29 @@ def main():
     plt.xlabel(r"$x$/m")
     plt.ylabel(r"$y$/m")
     plt.savefig("output_data/position_output.svg")
-    plt.show()
+    if params.show_plots: 
+      plt.show()
+    plt.cla()
     plt.xlabel(r"$x$/m")
     plt.ylabel(r"$y$/m")
     plt.plot([i[0] for i in com], [i[1] for i in com])
     plt.title("COM")
 
     plt.savefig("output_data/COM.svg")
-    plt.show()
+    if params.show_plots:
+      plt.show()
+    plt.cla()
     positions = None
     com = None
     
-    kepler(astrolist_states)
+    kepler(astrolist_states, params.star, params.satellite[0], params.show_plots)
+    plt.cla()
 
     # Check the moon phase on New Years Eve
 
-    get_moon_phase(astrolist_states[-1],"output_data/moon_phase")
+    get_moon_phase(astrolist_states[-1],"output_data/moon_phase", params.show_plots)
+    plt.cla()
+
 
 
     if params.animation_step != 0:
