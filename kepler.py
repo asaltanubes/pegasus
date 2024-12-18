@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-Script dedicated to...
+There are three Kepler laws:
+1. Orbits ara elipses with one of the focus on the center of mass
+2. The body1-body2 vector swipes equal areas in equal times,
+    which is equivalent to angular momentum, that has been proved using plots
+3. The cube of the period T^3 is proportional to R^2
+
+This scipt is dedicated to proving the 3rd Kepler Law
 
 Created on Wed Dic 4 2024
 
@@ -57,10 +63,10 @@ def kepler(list_astros: list[AstroList], star_name: str, satellite_name: str, sh
     positions = np.array([[i.pos_com for i in astro_times] for astro_has_enough_data, astro_times in zip(which_astros_have_half_a_year, astros) if astro_has_enough_data])
     radious_norm_max = np.max(np.array(np.linalg.norm(positions, axis=2)), axis=1)
     plt.scatter(np.log(radious_norm_max), np.log(mean_year_duration))
-    print(r(np.log(radious_norm_max), np.log(mean_year_duration)))
+    print(f"Correlation coefficient of the log(a) log(T) graph from kepler: {r(np.log(radious_norm_max), np.log(mean_year_duration)):.5f}")
     pen, dpen, n0, dn0 = least_squares(np.log(radious_norm_max), np.log(mean_year_duration))
-    print(pen, dpen, n0, dn0)
     xx = np.linspace(np.min(np.log(radious_norm_max)), np.max(np.log(radious_norm_max)))
+    print(f"The linear regression from the kepler data is y = ({pen:.5f} ± {dpen:.5f})x + ({n0:.5f} ± {dn0:.5f})")
     plt.plot(xx, pen*xx+n0, c="red", zorder=-1)
     plt.xlabel(r"$\ln(a/\text{m})$")
     plt.ylabel(r"$\ln(T/\text{s})$")
@@ -71,6 +77,12 @@ def kepler(list_astros: list[AstroList], star_name: str, satellite_name: str, sh
 
 
 def r(x: list[float], y: list[float]):
+    """
+    Computes the correlation coefficient for a linear regression from the x and y values of the datapoints.
+    Args: 
+        x: list[float] x values of the datapoints
+        y: list[float] y values of the datapoints
+    """
     x = np.array(x)
     y = np.array(y)
     des_x = x - x.mean()

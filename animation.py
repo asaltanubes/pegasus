@@ -6,6 +6,8 @@ given the data of the simulation. The animation is saved in the output_data fold
 In Spyder the animation does not show propertly, but it is saved in the folder output_data
 as usual.
 
+Was not produced using AI.
+
 Created on Wed Dic 4 2024
 
 @author: oscar, gustavo
@@ -60,5 +62,6 @@ def create_animation(lists: list[AstroList], filename: str, show_progress: bool)
     ax.set_facecolor("black")
     ax.tick_params(left = False, right = False , labelleft = False, labelbottom = False, bottom = False) 
     anim = animation.ArtistAnimation(fig, frames)
-    print("Saving...")
+    print("Saving...", end="", flush=True)
     anim.save(f'{filename}.gif', fps=30)
+    print("Complete!")

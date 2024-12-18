@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Script dedicated to...
+Astro and Astrolist classes are defined in this script 
 
-Created on Wed Dic 4 2024
+Created on Wed Oct 9 2024
 
 @author: gustavo
 """

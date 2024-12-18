@@ -29,11 +29,6 @@ from save_state import save_astros
 from eclipse_search import *
 from moon_phase import get_moon_phase
 from kepler import kepler
-"""
-- borrar mucho codigo comentado por ahi
-- update_forces sirve para algo?
-- ¿¿Guardar input: initial_conditions y simulation_parameters??
-"""
 
 
 def main():
@@ -61,11 +56,9 @@ def main():
 
     # Display initial conditions and parameters
     print(f"Initial conditions \n {astrolist}")
-    print()
+    print(80*"-")
     print(f"Parameters: \n{params}")
-
-    # earth = astrolist.get_astro_by_name("earth")
-    # theta0_earth = np.arctan2(earth.position[1], earth.position[0])
+    print(80*"-")
 
     # All astrolist are stored
     astrolist_states = []
@@ -76,13 +69,14 @@ def main():
 
     # Propagate the astrolist state for given final_state
     while astrolist.time < final_time:
+        # Only show the progress if indicated to
         if params.show_progress:
             print(f"Simulation is {astrolist.time.item()/final_time*100:.3f}% complete!", end="\r")
         astrolist = verlet.advance_time(astrolist, params.interval_data_save*params.delta_time+astrolist.time)
         astrolist_states.append(astrolist.copy())
         
         #  Check for eclipses over the time of simulation
-        last_time_eclipse = eclipse_check(astrolist, last_time_eclipse)
+        last_time_eclipse = eclipse_check(astrolist, params.star, params.planet[0], params.satellite[0], params.planet[1], params.satellite[1], last_time_eclipse)
         step += 1
     print("                                           ", end = "\r")
     print("Simulation complete!")
@@ -91,15 +85,17 @@ def main():
     save_astros(astrolist_states)
     times = np.array([astrolist.time for astrolist in astrolist_states])
     
+    # Obtaining the total angular momentum for printing
     angular_momentum = np.array([astrolist.angular_momentum() for astrolist in astrolist_states])
     x_angular_momentum = np.array([a[0] for a in angular_momentum])
     y_angular_momentum = np.array([a[1] for a in angular_momentum])
     z_angular_momentum = np.array([a[2] for a in angular_momentum])
-    
+    print(80*"-") 
     print(f"Max of the angular momentum x component: {np.max(x_angular_momentum)}, minumum of the angular momentum x component: {np.min(x_angular_momentum)}")
     print(f"Max of the angular momentum y component: {np.max(y_angular_momentum)}, minumum of the angular momentum y component: {np.min(y_angular_momentum)}")
     print(f"Variation of the angular momentum z component: {(np.max(z_angular_momentum)-np.min(z_angular_momentum))/(np.mean(z_angular_momentum))}")
     
+    print(80*"-") 
     plt.plot(times, (z_angular_momentum-np.mean(z_angular_momentum))/np.mean(z_angular_momentum))
     plt.title('Relative deviation of\n the z component of total Angular momentum')
     plt.xlabel(r"$t/\text{s}$")
@@ -117,6 +113,7 @@ def main():
     total_energy = np.array([astrolist.potential for astrolist in astrolist_states]) + np.array([astrolist.kinetic_energy() for astrolist in astrolist_states])
     
     print(f"Variation of the energy: {(np.max(total_energy)-np.min(total_energy))/(np.mean(total_energy))}")
+    print(80*"-") 
     plt.plot(times, (total_energy-np.mean(total_energy))/np.mean(total_energy))
     plt.title('Relative deviation of the Energy')
     plt.xlabel(r"$t/\text{s}$")
@@ -155,6 +152,7 @@ def main():
     
     kepler(astrolist_states, params.star, params.satellite[0], params.show_plots)
     plt.cla()
+    print(80*"-") 
 
     # Check the moon phase on New Years Eve
 
@@ -162,9 +160,9 @@ def main():
     plt.cla()
 
 
-
     if params.animation_step != 0:
         create_animation(astrolist_states[::params.animation_step//params.interval_data_save], "output_data/animation", params.show_progress)
+    print(80*"-") 
 
 
 if __name__ == "__main__":

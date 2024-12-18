@@ -67,8 +67,8 @@ satellite moon, 1737500
 planet earth, 6378000
 # Whether graphs are displayed after the simulation. The will be saved anyway.
 show_plots true
-# Using Spyder the progress indicator does not work properly, it MUST be set as 
-# False to get a cleaner output
+# Using Spyder the progress indicator does not work properly, 
+# it MUST be set as False to get a cleaner output on Spyder
 show_progress true
 ```
 

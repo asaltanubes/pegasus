@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Script dedicated to...
+Script dedicated to the reading of initial conditions and simulation parameters.
 
 Created on Wed Dic 4 2024
 
-@author: gustavo
+@author: gustavo, oscar
 """
 
 import numpy as np

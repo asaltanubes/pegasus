@@ -13,14 +13,14 @@ import numpy as np
 
 
 
-def eclipse_check(astrolist: AstroList, last_time_eclipse: bool) -> bool:
+def eclipse_check(astrolist: AstroList, star_name: str, planet_name: str, satellite_name: str, planet_radius: float, satellite_radius: float, last_time_eclipse: bool) -> bool:
     """
-    Checks if the configuration of the Sun, Moon and Earth is compatible
+    Checks if the configuration of the star, satellite and planet is compatible
     with an eclipse, comparing the shadow of both bodies with the angular separation
     in between them. 
 
     Args:
-        astrolist (Astrolist): Astrolist including the Sun, Earth and Moon, and their respective 
+        astrolist (Astrolist): Astrolist including the star, planet and satellite, and their respective 
                                positions and velocities.
         last_time_eclipse (bool): Boolean showing if the last checked Astrolist had an elcipse. Used to avoid
                                   pointing out the same eclipse several times.
@@ -28,29 +28,25 @@ def eclipse_check(astrolist: AstroList, last_time_eclipse: bool) -> bool:
     Returns:
         Boolean showing if an elcipse was found, to be used as last_time_eclipse
     """
-    # Rasius of sun and moon, used to calculate their "shadow"
-    r_earth = 6378000 # m
-    r_moon = 1737500 # m
-
     # Get the 3 bodies of interest and their positions
-    sun = astrolist.get_astro_by_name('sun')
-    earth = astrolist.get_astro_by_name('earth')
-    moon = astrolist.get_astro_by_name('moon')
+    star = astrolist.get_astro_by_name(star_name)
+    planet = astrolist.get_astro_by_name(planet_name)
+    satellite = astrolist.get_astro_by_name(satellite_name)
 
-    sun_position = sun.position
-    earth_position = earth.position
-    moon_position = moon.position
+    star_position = star.position
+    planet_position = planet.position
+    satellite_position = satellite.position
 
     # Define r1 as the sun-earth distance and r2 as the sun-moon distance, and their norms
-    r1 = np.subtract(earth_position, sun_position)
-    r2 = np.subtract(moon_position, sun_position)
+    r1 = np.subtract(planet_position, star_position)
+    r2 = np.subtract(satellite_position, star_position)
     r1_norm, r2_norm = np.linalg.norm(np.vstack([r1, r2]),axis = 1) 
 
     # Calculate necessary angles, theta angle between moon and earth, alpha earth-radius angle
     #   and beta moon-radius angle
     theta = np.arccos(np.linalg.norm(np.divide(np.dot(r1,r2),(r1_norm*r2_norm))))
-    alpha = np.arctan(np.divide(r_earth,r1_norm))
-    beta = np.arctan(np.divide(r_moon,r2_norm))
+    alpha = np.arctan(np.divide(planet_radius,r1_norm))
+    beta = np.arctan(np.divide(satellite_radius,r2_norm))
 
     # Set the condition for an eclipse
     if (alpha+beta) > theta:
@@ -90,7 +86,7 @@ def seconds_to_years(time_s: float) -> str:
 
 
 
-# def search_eclipse(sun_positions: list, earth_positions: list, moon_positions: list, time):
+# def search_eclipse(sun_positions: list, planet_position: list, moon_positions: list, time):
 #     """
 #     Poject of similar function to be applied to a list of positions instead of just
 #     one Astrolist. More efficient, but not refined
