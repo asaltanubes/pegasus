@@ -57,7 +57,7 @@ def eclipse_check(astrolist: AstroList, last_time_eclipse: bool) -> bool:
         # Check if another eclipse was just found
         if not last_time_eclipse: 
             # Check if eclipse was a Moon or Earth Eclipse and print date, .item() transforms to a handle number   
-            print(f'{'Sun' if r1_norm>r2_norm else 'Moon'} Eclipse! on {seconds_to_years(astrolist.time.item())} (since sim. start)')
+            print(f"{'Sun' if r1_norm>r2_norm else 'Moon'} Eclipse! on {seconds_to_years(astrolist.time.item())} (since sim. start)")
 
         last_time_eclipse = True 
 

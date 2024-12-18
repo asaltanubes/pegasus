@@ -76,7 +76,8 @@ def main():
 
     # Propagate the astrolist state for given final_state
     while astrolist.time < final_time:
-        print(f"Simulation is {astrolist.time.item()/final_time*100:.3f}% complete!", end="\r")
+        if params.show_progress:
+            print(f"Simulation is {astrolist.time.item()/final_time*100:.3f}% complete!", end="\r")
         astrolist = verlet.advance_time(astrolist, params.interval_data_save*params.delta_time+astrolist.time)
         astrolist_states.append(astrolist.copy())
         
@@ -163,7 +164,7 @@ def main():
 
 
     if params.animation_step != 0:
-        create_animation(astrolist_states[::params.animation_step//params.interval_data_save], "output_data/animation")
+        create_animation(astrolist_states[::params.animation_step//params.interval_data_save], "output_data/animation", params.show_progress)
 
 
 if __name__ == "__main__":

@@ -67,6 +67,9 @@ satellite moon, 1737500
 planet earth, 6378000
 # Whether graphs are displayed after the simulation. The will be saved anyway.
 show_plots true
+# Using Spyder the progress indicator does not work properly, it MUST be set as 
+# False to get a cleaner output
+show_progress true
 ```
 
 The configuration files support two key features: line-based comments that can be added using the `#` symbol, and the ability to perform simple mathematical operations like addition or multiplication within parameter values.

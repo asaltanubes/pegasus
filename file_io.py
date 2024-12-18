@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-
+"""
+Script dedicated to...
+
+Created on Wed Dic 4 2024
+
+@author: gustavo
+"""
 
 import numpy as np
 from astros import Astro, AstroList, float_type
@@ -28,6 +35,7 @@ class ConfigParams:
         self.planet = params["planet"]
         self.satellite = params["satellite"]
         self.show_plots = params["show_plots"]
+        self.show_progress = params["show_progress"]
 
     def __str__(self) -> str:
         """Returns string representation of the configuration parameters"""
@@ -93,7 +101,7 @@ def load_configuration(file: str) -> ConfigParams:
     The configuration file should contain key-value pairs for parameters.
     Default values are used for any parameters not specified in the file.
     """
-    defaults = {"delta_time": 3600, "number_steps": 365*24, "animation_step": 0, "star": "", "planet": ("", 0), "satellite": ("", 0), "interval_data_save": 1, "show_plots": True}
+    defaults = {"delta_time": 3600, "number_steps": 365*24, "animation_step": 0, "star": "", "planet": ("", 0), "satellite": ("", 0), "interval_data_save": 1, "show_plots": True, "show_progress": True}
 
     with open(file, "rt") as f:
         for n, line in enumerate(f.readlines()):
@@ -114,6 +122,8 @@ def load_configuration(file: str) -> ConfigParams:
                         parts = value.strip().split(",")
                         defaults[k] = (parts[0].strip(), float(eval(parts[1].strip())))
                     elif k == "show_plots":
+                        defaults[k] = parse_bool(value, file, n, line)
+                    elif k == "show_progress":
                         defaults[k] = parse_bool(value, file, n, line)
                     else:
                         defaults[k] = int(eval(value))

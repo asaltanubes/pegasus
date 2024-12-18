@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Script dedicated to...
+Script dedicated to create an animation of the trajectories of all the astros
+given the data of the simulation. The animation is saved in the output_data folder.
+
+In Spyder the animation does not show propertly, but it is saved in the folder output_data
+as usual.
 
 Created on Wed Dic 4 2024
 
@@ -13,7 +17,7 @@ from matplotlib import animation
 from astros import AstroList
 from random import randrange
 
-def create_animation(lists: list[AstroList], filename: str):
+def create_animation(lists: list[AstroList], filename: str, show_progress: bool):
     """
     Creates an animated 3D visualization of astronomical objects and
     saves it to a file.
@@ -43,7 +47,8 @@ def create_animation(lists: list[AstroList], filename: str):
     frames = []
     final_time = len(lists)
     for i, l in enumerate(lists):
-        print(f"Video generated {i/final_time*100:.3f}%", end="\r")
+        if show_progress:
+            print(f"Video generated {i/final_time*100:.3f}%", end="\r")
         frames.append(update(l))
     print("                                                      ", end="\r")
     print("Video completed!")

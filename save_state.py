@@ -5,7 +5,7 @@ steps of time of the simulation. As well as the inital parameters and positions
 
 Created on Wed Dic 4 2024
 
-@author: raul, gustavo
+@author: raul, oscar
 """
  
 from astros import AstroList
@@ -39,16 +39,22 @@ def save_astros(list_astros: list[AstroList]):
 
         file_name = f"output_data/astro_data/{astro.name}.dat"
 
-        # In case the file_name 
+        # In case the directory or file_name does not exit, creates it 
         os.makedirs(os.path.dirname(file_name), exist_ok=True)
 
         with open(file_name,'w') as data_file:
+            
+            # Writes the header of the file
+            data_file.write(f"Astro: {astro.name},  mass:  {astro.mass} \n")
+            data_file.write("t/s  ||    (x,y,z) position/m  ||  (x,y,z) pos_com/m   ||    (x,y,z) velocity/ms^-1    ||    (x,y,z) force/N\n") 
 
-            data_file.write(f"{astro.name},  {astro.mass} \n")
-
+            # Saves data for every moment
             for astrolist in list_astros:
+
                 astro = astrolist.get_all_astros()[i]
-                data_file.write(','.join([str(x) for x in astro.position] +
+                
+                data_file.write(','.join([str(astrolist.time)]+
+                                        [str(x) for x in astro.position] +
                                         [str(x) for x in astro.pos_com] +
                                         [str(x) for x in astro.velocity] + 
                                         [str(x) for x in astro.force] + 

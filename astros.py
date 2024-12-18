@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-
+"""
+Script dedicated to...
+
+Created on Wed Dic 4 2024
+
+@author: gustavo
+"""
 
 
 
