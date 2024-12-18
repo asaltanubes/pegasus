@@ -1,5 +1,10 @@
 # Pegasus
 
+---
+
+## Óscar Castro Remesal, Raúl Penagos Solórzano, Gustavo Gancedo Crespo
+
+---
 Pegasus is a Python-based astronomical simulation tool that models the motion of celestial bodies in the solar system using numerical integration methods. It can simulate planetary orbits, calculate eclipses, determine moon phases, and verify Kepler's laws.
 
 ---
@@ -13,6 +18,7 @@ Pegasus is a Python-based astronomical simulation tool that models the motion of
 - Generates animations of the simulated system
 - Saves position and state data for analysis
 - Configurable simulation parameters
+- Configurable initial astro parameters
 - Energy and angular momentum conservation tracking
 
 ## Installation
@@ -55,8 +61,12 @@ Number_steps        24*345
 Interval_data_save  10
 # Steps between animation frames. If zero or not especified, animation won't be created
 animation_step      100
-# Astros to check for eclipse. First the star, then the moon and the planet followed by their radius
-eclipse   sun, moon, 1737500, earth, 6378000
+# Astros to check for eclipses, moon phases and Kepler.
+star sun
+satellite moon, 1737500
+planet earth, 6378000
+# Whether graphs are displayed after the simulation. The will be saved anyway.
+show_plots true
 ```
 
 The configuration files support two key features: line-based comments that can be added using the `#` symbol, and the ability to perform simple mathematical operations like addition or multiplication within parameter values.
@@ -173,6 +183,8 @@ Key functions:
 
 ### `moon_phase.py`
 Calculates and visualizes moon phases.
+Cropped picture of the Moon from the original: Luc Viatour / https://Lucnix.be
+https://creativecommons.org/licenses/by-sa/3.0/
 
 Key functions:
 - `get_moon_phase(system, filename)`:
@@ -201,10 +213,11 @@ Key functions:
 
 ## License
 
-[Your chosen license]
+MIT License - see `LICENSE` for details.
 
-## Authors
+## Authors and Responsabilities
+All the members of the team have contributed to the development of the project in all its parts, but each one has focused on some specific parts of the code. The main responsabilities are:
 
-- Óscar Castro Remesal
-- Raúl Penágos Solórzano
-- Gustavo Gancedo Crespo
+- Óscar Castro Remesal (main, readme, savestate, file_io, save_state, animation)
+- Raúl Penagos Solórzano (eclipse_search, moon_phases, save_state, data_tables_reader, inital_conditions) 
+- Gustavo Gancedo Crespo (main, astros, file_io, verlet, kepler, animation)
