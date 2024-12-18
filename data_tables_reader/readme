@@ -1,0 +1,20 @@
+@author: raul
+
+ 			⋆*✧data_tables_reader✦*⋆ 
+
+This folder contains the two versions of the used data_table_reader.
+Being website_2 the most udpated one.
+
+This program has been used as a help for data minning, getting a user 
+friendly csv file with the initial position-velocity data out of just
+the bare ephemeris downloaded from the NASA website.
+
+It also transforms the units to SI (from km as given in the web) 
+
+Sadly it has not been possible to implement an automatization of the mass
+lecture. This idea had to be abandoned since the format of the downloaded 
+files to specify the mass was not the same: using different labels, exponent 
+format, sometimes in diferent units...
+
+So having this file, it is only needed to copy the masses of each body, and
+you are ready to hit the simulation!
