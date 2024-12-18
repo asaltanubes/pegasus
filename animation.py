@@ -42,8 +42,12 @@ def create_animation(lists: list[AstroList], filename: str):
         return scat
     print("Generating Video...")
     frames = []
-    for l in lists:
+    final_time = len(lists)
+    for i, l in enumerate(lists):
+        print(f"Video generated {i/final_time*100:.3f}%", end="\r")
         frames.append(update(l))
+    print("                                                      ", end="\r")
+    print("Video completed!")
 
     ax.legend(loc = (-0.35, 0.3), labels=[i.name for i in lists[0].get_all_astros()], )
     ax.set_aspect("equal", adjustable="datalim")
