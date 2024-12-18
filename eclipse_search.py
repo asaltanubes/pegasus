@@ -67,40 +67,6 @@ def eclipse_check(astrolist: AstroList, last_time_eclipse: bool) -> bool:
     return(last_time_eclipse)
         
 
-
-def search_eclipse(sun_positions: list, earth_positions: list, moon_positions: list, time):
-    """
-    Call me maybe...
-    Poject of similar function to be applied to a list of positions instead of just
-    one Astrolist. More efficient, but not refined
-    """
-    r_earth = 6378000 # m
-    r_moon = 1737500 # m
-
-    r1 = np.subtract(earth_positions, sun_positions)
-    r2 = np.subtract(moon_positions, sun_positions)
-
-    r1_norm, r2_norm = np.linalg.norm(r1,axis = 1), np.linalg.norm(r2,axis = 1) 
-    theta = np.arccos(np.linalg.norm(np.divide(np.dot(r1,r2)),(r1_norm*r2_norm)))
-    alpha = np.arctan(np.divide(r_earth,r1_norm))
-    beta = np.arctan(np.divide(r_moon,r2_norm))
-    value = np.subtract(np.sum(alpha,beta),theta)
-
-    eclipses_time = []
-
-    # return[i for theta[i] in theta if  theta[i]<(alpha[i]+beta[i])] como lo hago así?
-    # Los que sí son eclipses, guardo su indice
-    for i, t in enumerate(value):
-        if t<0:
-            eclipses_time.append(time[i])
-    return(eclipses_time)
-            
-    # Si ponemos la fecha de inicio como argumento, podria dar como resultado fechas
-    # return(date_0+i*dt) 
-
-
-
-
 def seconds_to_years(time_s: float) -> str:
     """
     User-friendly function to display data. Transforms time from 
@@ -122,6 +88,36 @@ def seconds_to_years(time_s: float) -> str:
     days = (rest_year*y/7 - weeks)*7
     return(f"year {years}, week {weeks}, day {round(days)}")
 
+
+
+# def search_eclipse(sun_positions: list, earth_positions: list, moon_positions: list, time):
+#     """
+#     Poject of similar function to be applied to a list of positions instead of just
+#     one Astrolist. More efficient, but not refined
+#     """
+#     r_earth = 6378000 # m
+#     r_moon = 1737500 # m
+
+#     r1 = np.subtract(earth_positions, sun_positions)
+#     r2 = np.subtract(moon_positions, sun_positions)
+
+#     r1_norm, r2_norm = np.linalg.norm(r1,axis = 1), np.linalg.norm(r2,axis = 1) 
+#     theta = np.arccos(np.linalg.norm(np.divide(np.dot(r1,r2)),(r1_norm*r2_norm)))
+#     alpha = np.arctan(np.divide(r_earth,r1_norm))
+#     beta = np.arctan(np.divide(r_moon,r2_norm))
+#     value = np.subtract(np.sum(alpha,beta),theta)
+
+#     eclipses_time = []
+
+#     # return[i for theta[i] in theta if  theta[i]<(alpha[i]+beta[i])] como lo hago así?
+#     # Los que sí son eclipses, guardo su indice
+#     for i, t in enumerate(value):
+#         if t<0:
+#             eclipses_time.append(time[i])
+#     return(eclipses_time)
+            
+#     # Si ponemos la fecha de inicio como argumento, podria dar como resultado fechas
+#     # return(date_0+i*dt) 
 
 
 # TEST for second_to_years():
