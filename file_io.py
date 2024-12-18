@@ -24,12 +24,16 @@ class ConfigParams:
         self.number_steps = params["number_steps"]
         self.animation_step = params["animation_step"]
         self.interval_data_save = params["interval_data_save"]
-        self.eclipse = params["eclipse"]
+        self.star = params["star"]
+        self.planet = params["planet"]
+        self.satellite = params["satellite"]
+        self.show_plots = params["show_plots"]
 
     def __str__(self) -> str:
         """Returns string representation of the configuration parameters"""
         return f"  Delta time: {self.delta_time}\n  Number of steps: {self.number_steps}\n  Animation step: {self.animation_step}\n" +\
-               f"  Interval data save: {self.interval_data_save}\n  Eclipse: {self.eclipse}"
+               f"  Interval data save: {self.interval_data_save}\n  Star: {self.star}\n  Planet: {self.planet}\n  Satellite: {self.satellite}\n" +\
+               f"  Show plots: {self.show_plots}"
 
 def load_initial_condition(file: str) -> AstroList:
     """
@@ -89,7 +93,7 @@ def load_configuration(file: str) -> ConfigParams:
     The configuration file should contain key-value pairs for parameters.
     Default values are used for any parameters not specified in the file.
     """
-    defaults = {"delta_time": 3600, "number_steps": 365*24, "animation_step": 0, "eclipse": [], "interval_data_save": 1}
+    defaults = {"delta_time": 3600, "number_steps": 365*24, "animation_step": 0, "star": "", "planet": ("", 0), "satellite": ("", 0), "interval_data_save": 1, "show_plots": True}
 
     with open(file, "rt") as f:
         for n, line in enumerate(f.readlines()):
@@ -104,9 +108,13 @@ def load_configuration(file: str) -> ConfigParams:
                 if key == k:
                     if k == "delta_time":
                         defaults[k] = float(eval(value))
-                    elif k == "eclipse":
-                        defaults[k] = [i.strip() for i in value.split(",")]
-
+                    elif k == "star":
+                        defaults[k] = value.strip()
+                    elif k == "planet" or k == "satellite":
+                        parts = value.strip().split(",")
+                        defaults[k] = (parts[0].strip(), float(eval(parts[1].strip())))
+                    elif k == "show_plots":
+                        defaults[k] = parse_bool(value, file, n, line)
                     else:
                         defaults[k] = int(eval(value))
 
