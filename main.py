@@ -1,8 +1,16 @@
 # -*- coding: utf-8 -*-
 """
-Main script of the code, runs a simulation for the system given in initial_conditions.ini.
-It propagates the state of the astronomical system over the given Delta_time*Number_steps 
-specified in the simulation_parameters. Afterwards, it saves several graphs and displays results.
+Pegasus Software allows you to run a Astronomical Body System simulation for the
+system given in initial_conditions.ini, It propagates the state of the  system
+over the given Delta_time*Number_steps specified in the simulation_parameters. 
+It saves several graphs and displays results, such as:
+
+- Angular momentum variation    
+- Energy conservation
+- Position of each astronomical body
+- Center of Mass (COM) trajectory
+- Eclipses' dates
+- Moon Phases
 
    *    ✧    *    ·    ⋆    *    ✧    *     ·     *
  ✦   ____       *                    ✧           *
@@ -95,6 +103,7 @@ def main():
     print(f"Max of the angular momentum y component: {np.max(y_angular_momentum)}, minumum of the angular momentum y component: {np.min(y_angular_momentum)}")
     print(f"Variation of the angular momentum z component: {(np.max(z_angular_momentum)-np.min(z_angular_momentum))/(np.mean(z_angular_momentum))}")
     
+    # Plot angular momentum variation
     print(80*"-") 
     plt.plot(times, (z_angular_momentum-np.mean(z_angular_momentum))/np.mean(z_angular_momentum))
     plt.title('Relative deviation of\n the z component of total Angular momentum')
@@ -104,16 +113,20 @@ def main():
     if params.show_plots:
       plt.show()
     plt.cla()
-    
+
+    # Delete unnecesary data to speed up the code by gainig memory space
     angular_momentum = None
     x_angular_momentum = None
     y_angular_momentum = None
     z_angular_momentum = None
 
+    # Calculate and print total energy deviation
     total_energy = np.array([astrolist.potential for astrolist in astrolist_states]) + np.array([astrolist.kinetic_energy() for astrolist in astrolist_states])
-    
+
     print(f"Variation of the energy: {(np.max(total_energy)-np.min(total_energy))/(np.mean(total_energy))}")
     print(80*"-") 
+
+    # Show a plot with Relative deviation of the Energy
     plt.plot(times, (total_energy-np.mean(total_energy))/np.mean(total_energy))
     plt.title('Relative deviation of the Energy')
     plt.xlabel(r"$t/\text{s}$")
@@ -124,10 +137,11 @@ def main():
     plt.cla()
     total_energy = None
 
+    # Get all astros' and CenterOfMass positions 
     positions = [[i.position for i in astrolist.get_all_astros()] for astrolist in astrolist_states]
     com = [astrolist.center_of_mass for astrolist in astrolist_states]
-    # with open("positions.output", "wt") as file:
-    #     file.write("\n".join([", ".join([str(j) for j in i]) for i in positions]))
+
+    # Plot the trajectory of every astro
     for i in range(len(astrolist_states[0].get_free_astros())):
         plt.plot([j[i][0] for j in positions], [j[i][1] for j in positions])
     plt.plot([i[0] for i in com], [i[1] for i in com], marker="o")
@@ -137,29 +151,32 @@ def main():
     plt.savefig("output_data/position_output.svg")
     if params.show_plots: 
       plt.show()
+
+    # Plot position of the COM
     plt.cla()
     plt.xlabel(r"$x$/m")
     plt.ylabel(r"$y$/m")
     plt.plot([i[0] for i in com], [i[1] for i in com])
     plt.title("COM")
-
     plt.savefig("output_data/COM.svg")
     if params.show_plots:
       plt.show()
     plt.cla()
+
+    # Delete unnecesary data to speed up the code by gainig memory space
     positions = None
     com = None
     
+    # Run Kepler Law Script
     kepler(astrolist_states, params.star, params.satellite[0], params.show_plots)
     plt.cla()
     print(80*"-") 
 
     # Check the moon phase on New Years Eve
-
     get_moon_phase(astrolist_states[-1],"output_data/moon_phase", params.show_plots)
     plt.cla()
 
-
+    # Run the animation script
     if params.animation_step != 0:
         create_animation(astrolist_states[::params.animation_step//params.interval_data_save], "output_data/animation", params.show_progress)
     print(80*"-") 
