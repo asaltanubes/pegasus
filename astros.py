@@ -63,7 +63,7 @@ class Astro:
 
     def angular_momentum(self) -> float_type:
         """Calculates and returns the angular momentum with respect to the center of mass using mass*cross(position, velocity)"""
-        return self.mass*np.cross(self.pos_com, self.velocity)
+        return self.mass*np.cross(self.position, self.velocity)
 
     def __str__(self) -> str:
         """Returns string representation of the astronomical object including name (if exists), mass, position and velocity"""

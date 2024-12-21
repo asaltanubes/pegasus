@@ -42,13 +42,13 @@ class Verlet():
 
         r = y0.copy()
         v = yp0.copy()
-        a = func(v, r, t0)
+        a = func(r)
         delta_t2 = delta_t**2
 
         for i in range(1, int(number_of_steps)+1):
             r += v*delta_t + a*delta_t2/2
             v += a/2 * delta_t
-            a = func(v, r, t0 + i*delta_t)
+            a = func(r)
             v += a/2 * delta_t
 
         astrolist.update_state(v, r, final_time)
