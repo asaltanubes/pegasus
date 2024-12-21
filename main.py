@@ -93,8 +93,24 @@ def main():
     save_astros(astrolist_states)
     times = np.array([astrolist.time for astrolist in astrolist_states])
     
+    # Plotting the angular momentums of each astro to check whether or not they follow keplers 2nd law
+    angular_momentums = np.array([[i.angular_momentum() for i in astrolist.get_free_astros()] for astrolist in astrolist_states])
+    
+    for i in range(len(astrolist_states[0].get_free_astros())):
+      plt.plot(times, angular_momentums[:,i,2]/np.max(np.abs(angular_momentums[:, i, 2])), label=astrolist_states[0].get_free_astros()[i].name)
+    plt.title("Normalized z component of the angular momentum")
+    plt.xlabel(r"$t/\text{s}$")
+    plt.ylabel(r"$L_z/\text{max}(L_z)$")
+    plt.legend()
+    plt.savefig("output_data/angular_momentum_per_object.svg")
+    if params.show_plots:
+      plt.show()
+    plt.clf()
+    
+
+
     # Obtaining the total angular momentum for printing
-    angular_momentum = np.array([astrolist.angular_momentum() for astrolist in astrolist_states])
+    angular_momentum = np.sum(angular_momentums, axis=1)
     x_angular_momentum = np.array([a[0] for a in angular_momentum])
     y_angular_momentum = np.array([a[1] for a in angular_momentum])
     z_angular_momentum = np.array([a[2] for a in angular_momentum])
@@ -108,7 +124,7 @@ def main():
     plt.plot(times, (z_angular_momentum-np.mean(z_angular_momentum))/np.mean(z_angular_momentum))
     plt.title('Relative deviation of\n the z component of total Angular momentum')
     plt.xlabel(r"$t/\text{s}$")
-    plt.ylabel(r"$L_z/\text{kg m}^2 \text{s}^{-1}$")
+    plt.ylabel(r"$L_z-<L_z>/<L_z>$")
     plt.savefig('output_data/angular_momentum.svg')
     if params.show_plots:
       plt.show()
@@ -130,7 +146,7 @@ def main():
     plt.plot(times, (total_energy-np.mean(total_energy))/np.mean(total_energy))
     plt.title('Relative deviation of the Energy')
     plt.xlabel(r"$t/\text{s}$")
-    plt.ylabel(r"$E/\text{J}$")
+    plt.ylabel(r"$E-<E>/<E>$")
     plt.savefig('output_data/energy_conservation.svg')
     if params.show_plots:
       plt.show()
