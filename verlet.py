@@ -33,7 +33,7 @@ class Verlet():
         Returns:
             Updated astrolist with new positions and velocities
         """
-        func = lambda yp, y, x: astrolist.second_order_func(yp, y, x)
+        func = lambda y: astrolist.second_order_func(y)
         yp0, y0, t0 = astrolist.second_order_initial_conditions()
         delta_t = np.array([self.stepsize])
 

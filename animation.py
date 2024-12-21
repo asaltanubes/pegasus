@@ -57,8 +57,6 @@ def create_animation(lists: list[AstroList], filename: str, show_progress: bool)
 
     ax.legend(loc = (-0.35, 0.3), labels=[i.name for i in lists[0].get_all_astros()], )
     ax.set_aspect("equal", adjustable="datalim")
-    # ax.axis("off")
-    # ax.view_init(90, -90)
     ax.set_facecolor("black")
     ax.tick_params(left = False, right = False , labelleft = False, labelbottom = False, bottom = False) 
     anim = animation.ArtistAnimation(fig, frames)

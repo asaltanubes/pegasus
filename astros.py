@@ -2,6 +2,8 @@
 """
 Astro and Astrolist classes are defined in this script 
 
+All units are in SI
+
 Created on Wed Oct 9 2024
 
 @author: gustavo
@@ -60,8 +62,8 @@ class Astro:
         return 1/2*self.mass*np.linalg.norm(self.velocity)**2
 
     def angular_momentum(self) -> float_type:
-        """Calculates and returns the angular momentum using mass*cross(position, velocity)"""
-        return self.mass*np.cross(self.position, self.velocity)
+        """Calculates and returns the angular momentum with respect to the center of mass using mass*cross(position, velocity)"""
+        return self.mass*np.cross(self.pos_com, self.velocity)
 
     def __str__(self) -> str:
         """Returns string representation of the astronomical object including name (if exists), mass, position and velocity"""
@@ -149,25 +151,28 @@ class AstroList:
         y  = [i.position for i in self.__astros]
         return (yp, y, self.time)
 
-    def second_order_func(self, yp, y, t):
-        """Calculate gravitational forces and potentials between all objects for second order solver
+    def second_order_func(self, y) -> np.ndarray:
+        """
+        Calculate gravitational forces and potentials between all objects for second order solver,
+        uses the positions given in y instead of the ones in the astros. 
+
+        Also updates the potentials and the forces
 
         Args:
-            yp: List of velocities for each object
             y: List of positions for each object
-            t: Current time value
 
         Returns:
             An array of the accelerations of all the free astros
 
         """
+
         G = float_type(6.6743e-11)
         masses = self.masses()
         position_and_masses = [[y[i], masses[i]] for i in range(len(y))]
         self.potential = 0*self.potential
-        # forces = np.zeros((len(self.__astros), 3), dtype=float_type)
         self.reset_forces()
         self.reset_potentials()
+        # double loop for free astros
         for i in range(len(self.__astros)):
             astro_i = self.__astros[i]
             i_pos, i_mass = position_and_masses[i]
@@ -176,14 +181,18 @@ class AstroList:
                 j_pos, j_mass = position_and_masses[j]
                 r = j_pos-i_pos
                 inv_r = 1/np.linalg.norm(r)
+
+                # computing force
                 force = G * i_mass*j_mass*inv_r**3*r
                 astro_i.force += force
                 astro_j.force -= force
+
+                # computing potential
                 potential =  -G * i_mass*j_mass*inv_r
                 astro_i.potential += potential
                 self.potential += potential
                 astro_j.potential += potential
-
+        # double loop using the fixed astros
         if self.__fixed_astros.size > 0:
             for fixed_astro in self.__fixed_astros:
                 for i in range(len(self.__astros)):
@@ -210,8 +219,6 @@ class AstroList:
             yp: List of velocities for each object
             y: List of positions for each object
             t: Current time value
-            forces: Optional list of forces for each object
-            potentials: Optional list of potentials for each object
         """
         self.center_of_mass = np.sum([i.mass*i.position for i in self.get_all_astros()], axis=0)/np.sum(self.masses())
         for (astro, v, r) in zip(self.__astros, yp, y):

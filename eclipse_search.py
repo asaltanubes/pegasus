@@ -12,7 +12,6 @@ from astros import AstroList, Astro
 import numpy as np
 
 
-
 def eclipse_check(astrolist: AstroList, star_name: str, planet_name: str, satellite_name: str, planet_radius: float, satellite_radius: float, last_time_eclipse: bool) -> bool:
     """
     Checks if the configuration of the star, satellite and planet is compatible
