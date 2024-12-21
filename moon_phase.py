@@ -93,8 +93,13 @@ def get_moon_phase(system: AstroList, filename: str, show_plot: bool):
 
     plt.title(f'Moon Phase: {phase}')
     plt.xlabel(f'Date: {seconds_to_years(system.time.item())}')
-    # plt.axis('off')   
-    # plt.axis("equal")
+    plt.tick_params(
+    which='both',      # both major and minor ticks are affected
+    bottom=False,      # ticks along the bottom edge are off
+    top=False,
+    left=False,
+    right=False,# ticks along the top edge are off
+    labelbottom=False) # labels along the bottom edge are off
     plt.savefig(f'{filename}.svg')
     if show_plot:
         plt.show()
