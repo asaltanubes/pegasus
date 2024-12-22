@@ -1,13 +1,14 @@
 # Pegasus
 
----
+___
 
 ## Óscar Castro Remesal, Raúl Penagos Solórzano, Gustavo Gancedo Crespo
 
----
+___
+
 Pegasus is a Python-based astronomical simulation tool that models the motion of celestial bodies in the solar system using numerical integration methods. It can simulate planetary orbits, calculate eclipses, determine moon phases, and verify Kepler's laws.
 
----
+___
 
 ## Features
 
@@ -73,6 +74,8 @@ show_progress true
 ```
 
 The configuration files support two key features: line-based comments that can be added using the `#` symbol, and the ability to perform simple mathematical operations like addition or multiplication within parameter values.
+
+It is worth to mention that the `Interval_data_save` parameter may limit the prediction of eclipses, since the eclipse detection algorithm is only performed when data is saved, not in all loops.
 
 ### Running the Simulation
 
@@ -224,3 +227,42 @@ All the members of the team have contributed to the development of the project i
 - Óscar Castro Remesal (main, readme, savestate, file_io, save_state, animation)
 - Raúl Penagos Solórzano (eclipse_search, moon_phases, save_state, data_tables_reader, inital_conditions) 
 - Gustavo Gancedo Crespo (main, astros, file_io, verlet, kepler, animation)
+
+The three members of the group have organized the many updates of the code using a git remote repository. This way we have been able to work in parallel and merge the changes in a controlled way as commits. 
+Therefore, not only have we learnt about Python coding but also about the use of git and the importance of a good organization of the work in a team.
+
+## Details about the simulation displayed on the presentation 
+The results shown on December 11<sup>th</sup> 2024 were achieved with the following parameters:
+
+```python
+Delta_time             3600
+Number_steps           24 * 365
+Interval_data_save     1
+animation_step         100
+show_plots             false
+# In Sypder the progress percentage does not work properly. 
+# If you are using Sypder, it is better to deactivate it
+show_progress          true
+# For eclipse, moon phase and kepler
+star sun
+# name radius
+satellite moon, 1737500
+planet earth, 6378000
+```
+
+And for the Kepler's laws verification, a few parameters were modified:
+
+```python
+Delta_time             24 * 3600
+Number_steps           100 * 365
+Interval_data_save     1
+animation_step         500
+```
+
+Sadly, while running the script on Spyder it is recommended to set `show_progress` as False, as the progress bar does not work properly on this IDE.
+
+The initial system conditions were the ones included in `initial_conditions.ini`, gathered from January 1<sup>st</sup>, 2024 (00:00:00). 
+They include the mass, position and velocity for all the planets of the Solar System, the Sun and Earth's satellite Moon, taking the Sun as the center of the system.
+
+
+
