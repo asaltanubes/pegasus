@@ -221,7 +221,7 @@ Key functions:
 
 MIT License - see `LICENSE` for details.
 
-## Authors and Responsabilities
+## Authors and Responsibilities
 All the members of the team have contributed to the development of the project in all its parts, but each one has focused on some specific parts of the code. The main responsabilities are:
 
 - Óscar Castro Remesal (main, readme, savestate, file_io, save_state, animation)
