@@ -3,7 +3,7 @@
 Script dedicated to saving the positions for all astros in the 
 steps of time of the simulation. As well as the inital parameters and positions
 
-Created on Wed Dic 4 2024
+Created on Wed Oct 9 2024
 
 @author: raul, oscar
 """

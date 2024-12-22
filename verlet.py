@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Description
+Dedicated script to the implementation of the Velocity Verlet integration method
 
-Created on Wed Dic 4 2024
+Created on Wed Oct 9 2024
 
 @author: gustavo
 """

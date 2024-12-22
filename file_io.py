@@ -2,7 +2,7 @@
 """
 Script dedicated to the reading of initial conditions and simulation parameters.
 
-Created on Wed Dic 4 2024
+Created on Wed Oct 9 2024
 
 @author: gustavo, oscar
 """
