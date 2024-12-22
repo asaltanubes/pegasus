@@ -99,7 +99,8 @@ def get_moon_phase(system: AstroList, filename: str, show_plot: bool):
     top=False,
     left=False,
     right=False,# ticks along the top edge are off
-    labelbottom=False) # labels along the bottom edge are off
+    labelbottom=False,
+    labelleft=False) # labels along the bottom edge are off
     plt.savefig(f'{filename}.svg')
     if show_plot:
         plt.show()

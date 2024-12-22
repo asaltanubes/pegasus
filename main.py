@@ -188,7 +188,7 @@ def main():
     plt.cla()
     print(80*"-") 
 
-    # Check the moon phase on New Years Eve
+    # Check the moon phase on last day of simulation
     get_moon_phase(astrolist_states[-1],"output_data/moon_phase", params.show_plots)
     plt.cla()
 
