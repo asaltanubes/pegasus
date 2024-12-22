@@ -118,6 +118,7 @@ def kepler(list_astros: list[AstroList], star_name: str, satellite_name: str, sh
     plt.plot(xx, pen*xx+n0, c="red", zorder=-1)
     plt.xlabel(r"$\ln(a/\text{m})$")
     plt.ylabel(r"$\ln(T/\text{s})$")
+    plt.axis("auto")
     plt.title(f"Slope = {pen:.3f}±{dpen:.3f} n0 = {n0:.3f}±{dn0:.3f}")
     plt.savefig("output_data/kepler.svg")
     if show_plot:
